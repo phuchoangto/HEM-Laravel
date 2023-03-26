@@ -15,3 +15,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [App\Http\Controllers\ImageController::class, 'index']);
 Route::post('/upload', [App\Http\Controllers\ImageController::class, 'upload']);
+Route::get('/login', [App\Http\Controllers\AuthController::class, 'login']);
+Route::post('/login', [App\Http\Controllers\AuthController::class, 'loginPost']);

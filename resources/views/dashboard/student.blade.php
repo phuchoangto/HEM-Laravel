@@ -4,9 +4,9 @@
 
 @section('content')
 <div class="d-flex flex-row-reverse mb-3">
-    <button type="button" class="btn btn-success"><i class="fas fa-plus"></i>&nbsp ADD</button>
+    <button type="button" data-mdb-toggle="modal" data-mdb-target="#addStudent" class="btn btn-success"><i class="fas fa-plus"></i>&nbsp ADD</button>
 </div>
-
+@include('dashboard.actions.addStudent')
 <div class="card">
     <div class="card-body p-0">
         <table class="table align-middle mb-0 bg-white table-bordered">
@@ -32,9 +32,10 @@
                         </div>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-link btn-rounded btn-sm fw-bold" data-mdb-ripple-color="dark">
+                        <button type="button" data-mdb-toggle="modal" data-mdb-target="#editStudent" class="btn btn-link btn-rounded btn-sm fw-bold" data-mdb-ripple-color="dark">
                             <i class="fas fa-user-edit"></i>&nbsp Edit
                         </button>
+                        @include('dashboard.actions.editStudent')
                         <button type="button" class="btn btn-link btn-rounded btn-sm fw-bold text-danger" data-mdb-ripple-color="dark">
                             <i class="fas fa-trash"></i>&nbsp Delete
                         </button>

@@ -19,7 +19,10 @@ class StudentController extends Controller
         $student->student_id = $request->student_id;
         $student->faculty_id = $request->faculty_id;
         $student->save();
-        return redirect()->back()->with('success', 'Student added successfully');
+        return response()->json([
+            'message' => 'Student added successfully',
+            'student' => $student
+        ]);
     }
 
     //edit

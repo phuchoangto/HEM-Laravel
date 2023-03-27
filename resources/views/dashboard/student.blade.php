@@ -51,11 +51,11 @@
                 <a class="page-link" href="{{ $students->previousPageUrl() }}" tabindex="-1" aria-disabled="{{ $students->previousPageUrl() ? 'false' : 'true' }}">Previous</a>
             </li>
             @for($i=1;$i<=$students->lastPage();$i++)
-                <li class="page-item {{ $students->currentPage() == $i ? 'active' : '' }} " ><a class="page-link" href="{{ $students->url($i) }}">{{ $i }}</a></li>
-            @endfor
-            <li class="page-item {{ $students->nextPageUrl() ? '' : 'disabled' }}">
-                <a class="page-link" href="{{ $students->nextPageUrl() }}" aria-disabled="{{ $students->nextPageUrl() ? 'false' : 'true' }}">Next</a>
-            </li>
+                <li class="page-item {{ $students->currentPage() == $i ? 'active' : '' }} "><a class="page-link" href="{{ $students->url($i) }}">{{ $i }}</a></li>
+                @endfor
+                <li class="page-item {{ $students->nextPageUrl() ? '' : 'disabled' }}">
+                    <a class="page-link" href="{{ $students->nextPageUrl() }}" aria-disabled="{{ $students->nextPageUrl() ? 'false' : 'true' }}">Next</a>
+                </li>
         </ul>
     </nav>
 </div>
@@ -182,13 +182,23 @@
             e.preventDefault();
             $.ajax({
                 type: "POST",
-                url: "/dashboard/student/",
-                data: $(this).serialize(),
+                url: "/dashboard/student/add",
+                data: {
+                    name: $('#name').val(),
+                    student_id: $('#student_id').val(),
+                    email: $('#email').val(),
+                    faculty_id: $('#faculty_id').val(),
+                    _token: "{{ csrf_token() }}"
+                },
                 success: function(response) {
                     console.log(response);
                     alert(response.message);
-                    location.reload();
                     $('#addStudent').modal('hide');
+                    //location.reload();
+
+                },
+                error: function(response) {
+                    console.log(response);
                 }
             });
         });
@@ -198,11 +208,21 @@
             $.ajax({
                 type: "PUT",
                 url: "/dashboard/student/" + id,
-                data: $(this).serialize(),
+                data: {
+                    name: $('#edit_name').val(),
+                    student_id: $('#edit_student_id').val(),
+                    email: $('#edit_email').val(),
+                    faculty_id: $('#edit_faculty_id').val(),
+                    _token: "{{ csrf_token() }}"
+                },
                 success: function(response) {
                     alert(response.message);
                     console.log(response);
                     $('#editStudent').modal('hide');
+                    location.reload();
+                },
+                error: function(response) {
+                    console.log(response);
                 }
             });
         });

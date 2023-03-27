@@ -24,3 +24,4 @@ Route::get('/dashboard/event', [App\Http\Controllers\DashboardController::class,
 Route::get('/dashboard/student', [App\Http\Controllers\DashboardController::class, 'student']);
 Route::get('/dashboard/user', [App\Http\Controllers\DashboardController::class, 'user']);
 
+

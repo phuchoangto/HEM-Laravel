@@ -45,6 +45,20 @@
             </tbody>
         </table>
     </div>
+    <nav aria-label="Page navigation example" style="margin-right:5px; padding-top:15px;">
+        <ul class="pagination justify-content-end">
+            <li class="page-item {{ $students->previousPageUrl() ? '' : 'disabled' }}">
+                <a class="page-link" href="{{ $students->previousPageUrl() }}" tabindex="-1" aria-disabled="{{ $students->previousPageUrl() ? 'false' : 'true' }}">Previous</a>
+            </li>
+            @for($i=1;$i<=$students->lastPage();$i++)
+                <li class="page-item {{ $students->currentPage() == $i ? 'active' : '' }} " ><a class="page-link" href="{{ $students->url($i) }}">{{ $i }}</a></li>
+            @endfor
+            <li class="page-item {{ $students->nextPageUrl() ? '' : 'disabled' }}">
+                <a class="page-link" href="{{ $students->nextPageUrl() }}" aria-disabled="{{ $students->nextPageUrl() ? 'false' : 'true' }}">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
 </div>
 @endsection
 

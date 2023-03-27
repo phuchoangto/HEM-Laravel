@@ -16,19 +16,20 @@ class DashboardController extends Controller
 
     public function event()
     {
-        $events = Event::all();
+        $events = Event::paginate(5);
         return view('dashboard.event', ['events' => $events]);
     }
 
     public function student()
     {
-        $students = Student::where('is_archive', false)->get();
+        $students = Student::where('is_archive', false)->paginate(5);
         return view('dashboard.student', ['students' => $students]);
     }
 
     public function user()
     {
-        $users = User::all();
+        $users = User::paginate(5);
         return view('dashboard.user', ['users' => $users]);
     }
+
 }

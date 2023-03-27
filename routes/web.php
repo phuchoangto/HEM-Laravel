@@ -18,3 +18,6 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
 Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout']);
 Route::get('/login', [App\Http\Controllers\AuthController::class, 'login']);
 Route::post('/login', [App\Http\Controllers\AuthController::class, 'loginPost']);
+
+// event route
+Route::get('/event/{id}', [App\Http\Controllers\EventController::class, 'show'])->name('event.show');

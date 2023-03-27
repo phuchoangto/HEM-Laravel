@@ -65,7 +65,7 @@
         <main style="margin-top: 58px;">
             <div class="container pt-4">
                 @yield('content')
-            </div>
+            </div>         
         </main>
         <!--Main Layout-->
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

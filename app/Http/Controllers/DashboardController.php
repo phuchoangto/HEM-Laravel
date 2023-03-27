@@ -22,7 +22,7 @@ class DashboardController extends Controller
 
     public function student()
     {
-        $students = Student::where('is_archive', false)->get();
+        $students = Student::where('is_archive', false)->paginate(5);
         return view('dashboard.student', ['students' => $students]);
     }
 

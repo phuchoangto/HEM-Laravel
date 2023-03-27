@@ -15,6 +15,7 @@ class Student extends Model
         'student_id',
         'email',
         'faculty_id',
+        'is_archive'
     ];
 
     public function faculty()

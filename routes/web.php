@@ -24,3 +24,8 @@ Route::get('/dashboard/event', [App\Http\Controllers\DashboardController::class,
 Route::get('/dashboard/student', [App\Http\Controllers\DashboardController::class, 'student']);
 Route::get('/dashboard/user', [App\Http\Controllers\DashboardController::class, 'user']);
 
+//student
+Route::post('/dashboard/student/add', [App\Http\Controllers\StudentController::class, 'addStudent']);
+Route::get('/dashboard/student/{id}', [App\Http\Controllers\StudentController::class, 'getOne']);
+Route::put('/dashboard/student/{id}', [App\Http\Controllers\StudentController::class, 'editStudent']);
+Route::delete('/dashboard/student/{id}', [App\Http\Controllers\StudentController::class, 'deleteStudent']);

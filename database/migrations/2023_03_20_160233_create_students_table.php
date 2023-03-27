@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('email');
             $table->unsignedBigInteger('faculty_id');
             $table->foreign('faculty_id')->references('id')->on('faculties');
+            $table->boolean('is_archive')->default(false);
             $table->timestamps();
         });
     }

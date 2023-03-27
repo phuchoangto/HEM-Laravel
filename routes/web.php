@@ -26,9 +26,13 @@ Route::get('/dashboard/student', [App\Http\Controllers\DashboardController::clas
 Route::get('/dashboard/user', [App\Http\Controllers\DashboardController::class, 'user']);
 
 //student
-Route::post('/dashboard/student/add', [App\Http\Controllers\StudentController::class, 'addStudent']);
+Route::post('/dashboard/student/', [App\Http\Controllers\StudentController::class, 'addStudent']);
 Route::get('/dashboard/student/{id}', [App\Http\Controllers\StudentController::class, 'getOne']);
 Route::put('/dashboard/student/{id}', [App\Http\Controllers\StudentController::class, 'editStudent']);
 Route::delete('/dashboard/student/{id}', [App\Http\Controllers\StudentController::class, 'deleteStudent']);
 
-//event
+//user
+Route::post('/dashboard/user/add', [App\Http\Controllers\UserController::class, 'addUser']);
+Route::get('/dashboard/user/{id}', [App\Http\Controllers\UserController::class, 'getOne']);
+Route::put('/dashboard/user/{id}', [App\Http\Controllers\UserController::class, 'editUser']);
+Route::delete('/dashboard/user/{id}', [App\Http\Controllers\UserController::class, 'deleteUser']);

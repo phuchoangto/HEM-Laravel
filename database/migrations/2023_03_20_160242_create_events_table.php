@@ -19,6 +19,7 @@ return new class extends Migration
             $table->dateTime('end_at');
             $table->string('location');
             $table->string('image');
+            $table->boolean('is_archive')->default(false);
             $table->unsignedBigInteger('faculty_id');
             $table->foreign('faculty_id')->references('id')->on('faculties');
             $table->timestamps();

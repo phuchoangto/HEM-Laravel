@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="d-flex flex-row-reverse mb-3">
-    <button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#addModal">
+    <button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#addStudent">
         Add
     </button>
 </div>
@@ -33,7 +33,7 @@
                             </div>
                     </td>
                     <td>
-                        <button type="button" onclick="showEdit(<?= $student->id ?>)" class="btn btn-link btn-rounded btn-sm fw-bold text-primary" data-mdb-toggle="modal" data-mdb-target="#editModal" data-mdb-ripple-color="dark">
+                        <button type="button" onclick="showEdit(<?= $student->id ?>)" class="btn btn-link btn-rounded btn-sm fw-bold text-primary" data-mdb-toggle="modal" data-mdb-target="#editStudent" data-mdb-ripple-color="dark">
                             <i class="fas fa-edit"></i>&nbsp Edit
                         </button>
                         <button type="button" onclick="deleteStudent(<?= $student->id ?>)" class="btn btn-link btn-rounded btn-sm fw-bold text-danger" data-mdb-ripple-color="dark">
@@ -48,8 +48,9 @@
 </div>
 @endsection
 
+
 <!-- Add Modal -->
-<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addStudent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -85,8 +86,9 @@
         </div>
     </div>
 </div>
+
 <!-- Edit Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editStudent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -137,7 +139,7 @@
                 $('#edit_student_id').val(response.student_id);
                 $('#edit_email').val(response.email);
                 $('#edit_faculty_id').val(response.faculty_id);
-                $('#editModal').show();
+                $('#editStudent').show();
             }
         });
     }
@@ -166,10 +168,13 @@
             e.preventDefault();
             $.ajax({
                 type: "POST",
-                url: "/dashboard/student/add",
+                url: "/dashboard/student/",
                 data: $(this).serialize(),
                 success: function(response) {
                     console.log(response);
+                    alert(response.message);
+                    location.reload();
+                    $('#addStudent').modal('hide');
                 }
             });
         });
@@ -183,7 +188,7 @@
                 success: function(response) {
                     alert(response.message);
                     console.log(response);
-                    $('#editModal').modal('hide');
+                    $('#editStudent').modal('hide');
                 }
             });
         });

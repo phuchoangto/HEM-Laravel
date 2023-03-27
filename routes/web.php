@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/event/{id}', [App\Http\Controllers\EventController::class, 'show'])->name('event.show');
 
 Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout']);
 Route::get('/login', [App\Http\Controllers\AuthController::class, 'login']);
@@ -24,4 +25,10 @@ Route::get('/dashboard/event', [App\Http\Controllers\DashboardController::class,
 Route::get('/dashboard/student', [App\Http\Controllers\DashboardController::class, 'student']);
 Route::get('/dashboard/user', [App\Http\Controllers\DashboardController::class, 'user']);
 
+//student
+Route::post('/dashboard/student/add', [App\Http\Controllers\StudentController::class, 'addStudent']);
+Route::get('/dashboard/student/{id}', [App\Http\Controllers\StudentController::class, 'getOne']);
+Route::put('/dashboard/student/{id}', [App\Http\Controllers\StudentController::class, 'editStudent']);
+Route::delete('/dashboard/student/{id}', [App\Http\Controllers\StudentController::class, 'deleteStudent']);
 
+//event

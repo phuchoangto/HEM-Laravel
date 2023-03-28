@@ -39,3 +39,6 @@ Route::delete('/dashboard/user/{id}', [App\Http\Controllers\UserController::clas
 
 //event
 Route::post('/dashboard/event/add', [App\Http\Controllers\EventController::class, 'addEvent']);
+Route::get('/dashboard/event/{id}', [App\Http\Controllers\EventController::class, 'getOneEvent']);
+Route::put('/dashboard/event/{id}', [App\Http\Controllers\EventController::class, 'editEvent']);
+Route::delete('/dashboard/event/{id}', [App\Http\Controllers\EventController::class, 'deleteEvent']);

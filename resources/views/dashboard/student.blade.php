@@ -194,7 +194,7 @@
                     console.log(response);
                     alert(response.message);
                     $('#addStudent').modal('hide');
-                    //location.reload();
+                    location.reload();
 
                 },
                 error: function(response) {

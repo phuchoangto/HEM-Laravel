@@ -51,11 +51,11 @@
                 <a class="page-link" href="{{ $users->previousPageUrl() }}" tabindex="-1" aria-disabled="{{ $users->previousPageUrl() ? 'false' : 'true' }}">Previous</a>
             </li>
             @for($i=1;$i<=$users->lastPage();$i++)
-                <li class="page-item {{ $users->currentPage() == $i ? 'active' : '' }} " ><a class="page-link" href="{{ $users->url($i) }}">{{ $i }}</a></li>
-            @endfor
-            <li class="page-item {{ $users->nextPageUrl() ? '' : 'disabled' }}">
-                <a class="page-link" href="{{ $users->nextPageUrl() }}" aria-disabled="{{ $users->nextPageUrl() ? 'false' : 'true' }}">Next</a>
-            </li>
+                <li class="page-item {{ $users->currentPage() == $i ? 'active' : '' }} "><a class="page-link" href="{{ $users->url($i) }}">{{ $i }}</a></li>
+                @endfor
+                <li class="page-item {{ $users->nextPageUrl() ? '' : 'disabled' }}">
+                    <a class="page-link" href="{{ $users->nextPageUrl() }}" aria-disabled="{{ $users->nextPageUrl() ? 'false' : 'true' }}">Next</a>
+                </li>
         </ul>
     </nav>
 </div>
@@ -156,7 +156,7 @@
             success: function(response) {
                 alert(response.message);
                 console.log(response);
-                //location.reload();
+                location.reload();
             },
             error: function(response) {
                 console.log(response);

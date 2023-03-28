@@ -56,7 +56,10 @@
                                 <img src="{{ $event->image }}" alt=""  style="width:220px;height:180px;"/>
                         </div>
                     </td>
-                    <td>
+                    <td><button type="button" data-mdb-toggle="modal" data-mdb-target="#detailEvent" class="btn btn-link btn-rounded btn-sm fw-bold text-warning" style="margin-bottom:15px;">
+                            <i class="fas fa-circle-info"></i></i>&nbsp Detail
+                        </button>
+                        @include('dashboard.actions.detailEvent')
                         <button type="button" data-mdb-toggle="modal" data-mdb-target="#editEvent" class="btn btn-link btn-rounded btn-sm fw-bold" data-mdb-ripple-color="dark"  style="margin-bottom:15px;">
                             <i class="fas fa-user-edit"></i>&nbsp Edit
                         </button>

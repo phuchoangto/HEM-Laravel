@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="d-flex flex-row-reverse mb-3">
-    <button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#addModal">
+    <button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#addStudent">
         Add
     </button>
 </div>
@@ -33,7 +33,7 @@
                             </div>
                     </td>
                     <td>
-                        <button type="button" onclick="showEdit(<?= $student->id ?>)" class="btn btn-link btn-rounded btn-sm fw-bold text-primary" data-mdb-toggle="modal" data-mdb-target="#editModal" data-mdb-ripple-color="dark">
+                        <button type="button" onclick="showEdit(<?= $student->id ?>)" class="btn btn-link btn-rounded btn-sm fw-bold text-primary" data-mdb-toggle="modal" data-mdb-target="#editStudent" data-mdb-ripple-color="dark">
                             <i class="fas fa-edit"></i>&nbsp Edit
                         </button>
                         <button type="button" onclick="deleteStudent(<?= $student->id ?>)" class="btn btn-link btn-rounded btn-sm fw-bold text-danger" data-mdb-ripple-color="dark">
@@ -51,19 +51,20 @@
                 <a class="page-link" href="{{ $students->previousPageUrl() }}" tabindex="-1" aria-disabled="{{ $students->previousPageUrl() ? 'false' : 'true' }}">Previous</a>
             </li>
             @for($i=1;$i<=$students->lastPage();$i++)
-                <li class="page-item {{ $students->currentPage() == $i ? 'active' : '' }} " ><a class="page-link" href="{{ $students->url($i) }}">{{ $i }}</a></li>
-            @endfor
-            <li class="page-item {{ $students->nextPageUrl() ? '' : 'disabled' }}">
-                <a class="page-link" href="{{ $students->nextPageUrl() }}" aria-disabled="{{ $students->nextPageUrl() ? 'false' : 'true' }}">Next</a>
-            </li>
+                <li class="page-item {{ $students->currentPage() == $i ? 'active' : '' }} "><a class="page-link" href="{{ $students->url($i) }}">{{ $i }}</a></li>
+                @endfor
+                <li class="page-item {{ $students->nextPageUrl() ? '' : 'disabled' }}">
+                    <a class="page-link" href="{{ $students->nextPageUrl() }}" aria-disabled="{{ $students->nextPageUrl() ? 'false' : 'true' }}">Next</a>
+                </li>
         </ul>
     </nav>
 </div>
 </div>
 @endsection
 
+
 <!-- Add Modal -->
-<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="addStudent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -99,8 +100,9 @@
         </div>
     </div>
 </div>
+
 <!-- Edit Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editStudent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -151,7 +153,7 @@
                 $('#edit_student_id').val(response.student_id);
                 $('#edit_email').val(response.email);
                 $('#edit_faculty_id').val(response.faculty_id);
-                $('#editModal').show();
+                $('#editStudent').show();
             }
         });
     }
@@ -181,8 +183,21 @@
             $.ajax({
                 type: "POST",
                 url: "/dashboard/student/add",
-                data: $(this).serialize(),
+                data: {
+                    name: $('#name').val(),
+                    student_id: $('#student_id').val(),
+                    email: $('#email').val(),
+                    faculty_id: $('#faculty_id').val(),
+                    _token: "{{ csrf_token() }}"
+                },
                 success: function(response) {
+                    console.log(response);
+                    alert(response.message);
+                    $('#addStudent').modal('hide');
+                    location.reload();
+
+                },
+                error: function(response) {
                     console.log(response);
                 }
             });
@@ -193,11 +208,21 @@
             $.ajax({
                 type: "PUT",
                 url: "/dashboard/student/" + id,
-                data: $(this).serialize(),
+                data: {
+                    name: $('#edit_name').val(),
+                    student_id: $('#edit_student_id').val(),
+                    email: $('#edit_email').val(),
+                    faculty_id: $('#edit_faculty_id').val(),
+                    _token: "{{ csrf_token() }}"
+                },
                 success: function(response) {
                     alert(response.message);
                     console.log(response);
-                    $('#editModal').modal('hide');
+                    $('#editStudent').modal('hide');
+                    location.reload();
+                },
+                error: function(response) {
+                    console.log(response);
                 }
             });
         });

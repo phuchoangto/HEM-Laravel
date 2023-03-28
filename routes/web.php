@@ -31,4 +31,14 @@ Route::get('/dashboard/student/{id}', [App\Http\Controllers\StudentController::c
 Route::put('/dashboard/student/{id}', [App\Http\Controllers\StudentController::class, 'editStudent']);
 Route::delete('/dashboard/student/{id}', [App\Http\Controllers\StudentController::class, 'deleteStudent']);
 
+//user
+Route::post('/dashboard/user/add', [App\Http\Controllers\UserController::class, 'addUser']);
+Route::get('/dashboard/user/{id}', [App\Http\Controllers\UserController::class, 'getOne']);
+Route::put('/dashboard/user/{id}', [App\Http\Controllers\UserController::class, 'editUser']);
+Route::delete('/dashboard/user/{id}', [App\Http\Controllers\UserController::class, 'deleteUser']);
+
 //event
+Route::post('/dashboard/event/add', [App\Http\Controllers\EventController::class, 'addEvent']);
+Route::get('/dashboard/event/{id}', [App\Http\Controllers\EventController::class, 'getOneEvent']);
+Route::put('/dashboard/event/{id}', [App\Http\Controllers\EventController::class, 'editEvent']);
+Route::delete('/dashboard/event/{id}', [App\Http\Controllers\EventController::class, 'deleteEvent']);

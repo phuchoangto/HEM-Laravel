@@ -23,7 +23,7 @@ class EventFactory extends Factory
             'start_at' => Carbon::now()->addDays(3),
             'end_at' => Carbon::now()->addDay(6),
             'location' => $this->faker->address,
-            'image' => '/public/storage/images/default-event-image.jpg',
+            'image' => 'images/events/' . $this->faker->numberBetween(1, 10) . '.jpg',
             'faculty_id' => 1,
         ];
     }

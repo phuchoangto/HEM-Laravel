@@ -49,7 +49,22 @@ class EventController extends Controller
             'event' => $event
         ]);
     }
-
+    public function addEvent(AddEventRequest $request)
+    {
+        $event = new Event();
+        $event->name = $request->name;
+        $event->description = $request->description;
+        $event->location = $request->location;
+        $event->start_at = $request->start_at;
+        $event->end_at = $request->end_at;
+        $event->image = $request->image;
+        $event->faculty_id = $request->faculty_id;
+        $event->save();
+        return response()->json([
+            'message' => 'Event added successfully',
+            'event' => $event
+        ]);
+    }
     //addEventview
     public function addEventView()
     {

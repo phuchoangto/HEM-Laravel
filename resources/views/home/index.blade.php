@@ -10,7 +10,7 @@
         <div class="col">
             <a href="{{route('event.show', $event->id)}}">
                 <div class="card h-100">
-                    <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/041.webp" class="card-img-top" alt="Hollywood Sign on The Hill" />
+                    <img src="{{Storage::url($event->image) }}" class="card-img-top" alt="Event image" height="200px" />
                     <div class="card-body">
                         <h5 class="card-title">{{$event->name}}</h5>
                         <p class="card-text">

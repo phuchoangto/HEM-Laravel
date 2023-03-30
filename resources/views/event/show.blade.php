@@ -8,10 +8,11 @@
     <div class="row">
         <div class="col-8">
             <div class="card h-100">
-                <img src="https://mdbcdn.b-cdn.net/img/new/standard/city/041.webp" class="card-img-top" alt="Hollywood Sign on The Hill" />
+                <img src="{{{Storage::url($event->image)}}}">
                 <div class="card-body">
                     <h5 class="card-title">Name: {{$event->name}}</h5>
                 </div>
+
                 <ul class="list-group list-group-light list-group-small">
                     <li class="list-group-item px-4">Falcuty: {{$event->faculty_id}}</li>
                     <li class="list-group-item px-4">Description: {{$event->description}}</li>

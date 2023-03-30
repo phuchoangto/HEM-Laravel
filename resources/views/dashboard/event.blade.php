@@ -53,7 +53,7 @@
                     </td>
                     <td>
                         <div style="object-fit:cover;">
-                            <img src="{{ $event->image }}" alt="" style="width:220px;height:180px;" />
+                            <img src="{{Storage::url($event->image)}}" alt="" style="width:220px;height:180px;" />
                         </div>
                     </td>
                     <td>
@@ -101,6 +101,7 @@
                 $('#edit_location').val(response.location);
                 $('#edit_start_at').val(response.start_at);
                 $('#edit_end_at').val(response.end_at);
+                $('#edit_image').attr('src', `{{ Storage::url('${response.image}') }}`);
                 $('#editEvent').show();
             },
             error: function(response) {
@@ -126,8 +127,24 @@
             }
         });
     }
+
+    function selectImage() {
+        // Mở hộp tệp để chọn ảnh mới
+        $('<input type="file"> accept="image/*">').on('change', function() {
+            // Đảm bảo rằng tệp được chọn là một hình ảnh
+            if (this.files[0].type.match(/^image\//)) {
+                // Đọc URL của tệp được chọn
+                var reader = new FileReader();
+                reader.onload = function() {
+                    // Cập nhật src của thẻ hình ảnh để hiển thị ảnh mới
+                    $('#edit_image').attr('src', reader.result);
+                };
+                reader.readAsDataURL(this.files[0]);
+            }
+        }).click();
+    }
     $(document).ready(function() {
-        $('#addEvent').submit(function(e) {
+        /*$('#addEvent').submit(function(e) {
             e.preventDefault();
             $.ajax({
                 type: 'POST',
@@ -154,7 +171,7 @@
                     console.log(data);
                 }
             });
-        });
+        });*/
         $('#editEvent').submit(function(e) {
             e.preventDefault();
             var id = $('#edit_id').val();
@@ -168,6 +185,7 @@
                     faculty_id: $('#edit_faculty_id').val(),
                     start_at: $('#edit_start_at').val(),
                     end_at: $('#edit_end_at').val(),
+                    image: $('#edit_image').attr('src'),
                     _token: "{{ csrf_token() }}"
                 },
                 success: function(response) {
@@ -222,6 +240,9 @@
                     <div class="mb-3">
                         <label for="end_at" class="form-label">End at</label>
                         <input type="datetime-local" class="form-control" id="edit_end_at" name="end_at">
+                    </div>
+                    <div style="object-fit:cover; text-align: center;">
+                        <img onclick="selectImage()" id="edit_image" alt="" style="width:220px;height:180px;" />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>

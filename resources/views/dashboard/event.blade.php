@@ -144,7 +144,7 @@
         }).click();
     }
     $(document).ready(function() {
-        $('#addEvent').submit(function(e) {
+        /*$('#addEvent').submit(function(e) {
             e.preventDefault();
             $.ajax({
                 type: 'POST',
@@ -171,7 +171,7 @@
                     console.log(data);
                 }
             });
-        });
+        });*/
         $('#editEvent').submit(function(e) {
             e.preventDefault();
             var id = $('#edit_id').val();
@@ -242,7 +242,7 @@
                         <input type="datetime-local" class="form-control" id="edit_end_at" name="end_at">
                     </div>
                     <div style="object-fit:cover; text-align: center;">
-                        <img src="{{Storage::url($event->image)}}" onclick="selectImage()" id="edit_image" alt="" style="width:220px;height:180px;" />
+                        <img onclick="selectImage()" id="edit_image" alt="" style="width:220px;height:180px;" />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>

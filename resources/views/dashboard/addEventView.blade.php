@@ -54,3 +54,36 @@
     </div>
 </div>
 @endsection
+
+<script>
+    $(document).ready(function() {
+        //add event
+        $('#addEvent').on('click', function() {
+            $.ajax({
+                type: "POST",
+                url: "/dashboard/event/add",
+                data: {
+                    name: $('#name').val(),
+                    description: $('#description').val(),
+                    location: $('#location').val(),
+                    faculty_id: $('#faculty_id').val(),
+                    start_at: $('#start_at').val(),
+                    end_at: $('#end_at').val(),
+                    image: $('#image').val(),
+                },
+                success: function(response) {
+                    console.log(response);
+                    alert("Data Saved");
+                    $('#addEventModal').modal('hide');
+                    location.reload();
+                },
+                error: function(error) {
+                    console.log(error);
+                    alert("Data Not Saved");
+                    $('#addEventModal').modal('hide');
+                    location.reload();
+                }
+            });
+        });
+    });
+</script>

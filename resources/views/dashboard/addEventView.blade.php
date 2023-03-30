@@ -5,7 +5,7 @@
 @section('content')
 <!-- Add -->
 <div class="pt-2" style="text-align: center;">
-    <h1 class="text-primary" style="font-weight: bold;font-family: 'georgia';">Create Event</h1>
+    <h1 class="text-primary" style="font-weight: bold;">Create Event</h1>
     <hr style="height: 6px;background-image: radial-gradient(closest-side, gray, rgba(128, 128, 128, 0) 100%);position: relative;border: 0;margin: 1.35em auto;max-width: 100%;background-position: 50%;box-sizing: border-box;">
 </div>
 <div class="card">
@@ -14,35 +14,46 @@
             <div class="modal-body">
                 <form action="/dashboard/event/add" method="POST">
                     @csrf
-                    <div>
-                        <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter name">
-                    </div>
-                    <div>
-                        <label for="description" class="form-label">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-                    </div>
-                    <div>
-                        <label for="location" class="form-label">Location</label>
-                        <input type="text" class="form-control" id="location" name="location" placeholder="Enter location">
-                    </div>
-                    <div>
-                        <label for="faculty_id" class="form-label">Faculty</label>
-                        <input type="number" class="form-control" id="faculty_id" name="faculty_id" placeholder="Enter Faculty">
-                    </div>
-                    <div>
-                        <label for="start_at" class="form-label">Start at</label>
-                        <input type="datetime-local" class="form-control" id="start_at" name="start_at">
-                    </div>
-                    <div>
-                        <label for="end_at" class="form-label">End at</label>
-                        <input type="datetime-local" class="form-control" id="end_at" name="end_at">
-                    </div>
-                    <div>
-                        <label for="image" class="form-label">Image</label>
-                        <input class="form-control" type="file" id="image" name="image">
-                    </div>
-
+                    <div class="form-group row">
+                        <div class="col-sm-4">
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <label for="name" class="col-sm-3 col-form-label">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter name">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <label for="faculty_id" class="col-sm-3 col-form-label">Faculty</label>
+                                    <input type="number" class="form-control" id="faculty_id" name="faculty_id" placeholder="Enter Faculty">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <label for="location" class="col-sm-4 col-form-label">Location</label>
+                                    <textarea type="text" class="form-control" id="location" name="location" rows="3" placeholder="Enter location"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pt-1 col-sm-8">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" rows="9"></textarea>
+                        </div> 
+                        <div class="form-group row">
+                            <div class="col-sm-3">
+                                <label for="start_at" class="col-sm-3 col-form-label">Start at</label>
+                                <input type="datetime-local" class="form-control" id="start_at" name="start_at">
+                            </div>
+                            <div class="col-sm-3">
+                                <label for="end_at" class="col-sm-3 col-form-label">End at</label>
+                                <input type="datetime-local" class="form-control" id="end_at" name="end_at">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="image" class="col-sm-3 col-form-label">Image</label>
+                                <input class="form-control" type="file" id="image" name="image">
+                            </div>
+                        </div>
+                    </div>               
                     <div class="modal-footer">
                         <a href="event"><button type="button" class="btn btn-secondary">Back</button></a>
                         &nbsp;&nbsp;&nbsp;&nbsp;

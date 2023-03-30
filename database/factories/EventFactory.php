@@ -20,8 +20,8 @@ class EventFactory extends Factory
         return [
             'name' => $this->faker->sentence,
             'description' => $this->faker->text,
-            'start_at' => Carbon::now()->addDays(3),
-            'end_at' => Carbon::now()->addDay(6),
+            'start_at' => Carbon::now()->addDay(1)->second(0),
+            'end_at' => Carbon::now()->addDay(6)->second(0),
             'location' => $this->faker->address,
             'image' => 'images/events/' . $this->faker->numberBetween(1, 10) . '.jpg',
             'faculty_id' => 1,

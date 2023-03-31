@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AddEventRequest;
 use App\Http\Requests\EditEventRequest;
 use App\Models\Event;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -15,7 +17,7 @@ class EventController extends Controller
         return view('event.show', ['event' => $event]);
     }
 
-    public function editEvent(EditEventRequest $request, $id)
+    public function editEvent(Request $request, $id)
     {
         $event = Event::find($id);
         $event->name = $request->name;
@@ -23,6 +25,12 @@ class EventController extends Controller
         $event->location = $request->location;
         $event->start_at = $request->start_at;
         $event->end_at = $request->end_at;
+        if ($request->hasFile('image')) {
+            $request->file('image')->storeAs('images/events', $event->id . '.jpg');
+            $event->image = 'images/events/' . $event->id . '.jpg';
+        } else {
+            $event->image = 'null';
+        }
         $event->faculty_id = $request->faculty_id;
         $event->save();
         return response()->json([

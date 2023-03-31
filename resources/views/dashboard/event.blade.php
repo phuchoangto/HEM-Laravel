@@ -128,6 +128,7 @@
         });
     }
 
+
     function selectImage() {
         // Mở hộp tệp để chọn ảnh mới
         $('<input type="file"> accept="image/*">').on('change', function() {
@@ -144,58 +145,23 @@
         }).click();
     }
     $(document).ready(function() {
-        /*$('#addEvent').submit(function(e) {
-            e.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: '/dashboard/event/add',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: {
-                    name: $('#name').val(),
-                    description: $('#description').val(),
-                    location: $('#location').val(),
-                    start_at: $('#start_at').val(),
-                    end_at: $('#end_at').val(),
-                    image: $('#image').val(),
-                    faculty_id: $('#faculty_id').val(),
-                },
-                success: function(response) {
-                    alert(response.message);
-                    console.log(response);
-                    $('#addEvent').modal('hide');
-                    location.reload;
-                },
-                error: function(data) {
-                    console.log(data);
-                }
-            });
-        });*/
         $('#editEvent').submit(function(e) {
             e.preventDefault();
+            var postData = new FormData($("#editEventForm")[0]);
             var id = $('#edit_id').val();
             $.ajax({
-                type: "PUT",
+                type: "POST",
                 url: "/dashboard/event/" + id,
-                data: {
-                    name: $('#edit_name').val(),
-                    description: $('#edit_description').val(),
-                    location: $('#edit_location').val(),
-                    faculty_id: $('#edit_faculty_id').val(),
-                    start_at: $('#edit_start_at').val(),
-                    end_at: $('#edit_end_at').val(),
-                    image: $('#edit_image').attr('src'),
-                    _token: "{{ csrf_token() }}"
-                },
-                success: function(response) {
-                    alert(response.message);
-                    console.log(response);
+                data: postData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    console.log(data);
                     $('#editEvent').modal('hide');
                     location.reload();
                 },
-                error: function(response) {
-                    console.log(response);
+                error: function(data) {
+                    console.log(data);
                 }
             });
         });
@@ -214,7 +180,7 @@
                 <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="dashboard/event/" method="POST" id="editEvent">
+                <form action="dashboard/event/" method="POST" id="editEventForm" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" id="edit_id" name="id" />
                     <div class="mb-3">
@@ -241,8 +207,12 @@
                         <label for="end_at" class="form-label">End at</label>
                         <input type="datetime-local" class="form-control" id="edit_end_at" name="end_at">
                     </div>
-                    <div style="object-fit:cover; text-align: center;">
-                        <img onclick="selectImage()" id="edit_image" alt="" style="width:220px;height:180px;" />
+                    <!-- <div style="object-fit:cover; text-align: center;">
+                        <img onclick="selectImage()" id="edit_image" name="edit_image" style="width:220px;height:180px;" />
+                    </div> -->
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Image</label>
+                        <input type="file" class="form-control" id="edit_image" name="image" accept="image">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>

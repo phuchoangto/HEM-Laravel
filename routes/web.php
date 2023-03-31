@@ -45,3 +45,4 @@ Route::delete('/dashboard/event/{id}', [App\Http\Controllers\EventController::cl
 
 //addevent 
 Route::get('/dashboard/addEventView', [App\Http\Controllers\EventController::class, 'addEventView']);
+Route::post('/save-image.php', [App\Http\Controllers\EventController::class, 'saveImage']);

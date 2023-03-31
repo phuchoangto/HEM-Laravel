@@ -38,7 +38,7 @@
                         <div class="pt-1 col-sm-8">
                             <label for="description" class="form-label">Description</label>
                             <textarea class="form-control" id="description" name="description" rows="9"></textarea>
-                        </div> 
+                        </div>
                         <div class="form-group row">
                             <div class="col-sm-3">
                                 <label for="start_at" class="col-sm-3 col-form-label">Start at</label>
@@ -53,7 +53,7 @@
                                 <input class="form-control" type="file" id="image" name="image">
                             </div>
                         </div>
-                    </div>               
+                    </div>
                     <div class="modal-footer">
                         <a href="event"><button type="button" class="btn btn-secondary">Back</button></a>
                         &nbsp;&nbsp;&nbsp;&nbsp;
@@ -65,7 +65,7 @@
     </div>
 </div>
 @endsection
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
         //add event

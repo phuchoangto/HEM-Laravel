@@ -25,6 +25,6 @@ class Student extends Model
 
     public function events()
     {
-        return $this->belongsToMany(Event::class, 'student_event', 'student_id', 'event_id');
+        return $this->belongsToMany(Event::class, 'student_event', 'student_id', 'event_id')->withPivot('check_in_at');
     }
 }

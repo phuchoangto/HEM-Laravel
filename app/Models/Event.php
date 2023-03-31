@@ -22,7 +22,7 @@ class Event extends Model
 
     public function students()
     {
-        return $this->belongsToMany(Student::class, 'student_event', 'event_id', 'student_id');
+        return $this->belongsToMany(Student::class, 'student_event', 'event_id', 'student_id')->withPivot('check_in_at');
     }
 
     public function faculty()

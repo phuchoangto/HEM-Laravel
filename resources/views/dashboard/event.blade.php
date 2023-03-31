@@ -57,7 +57,10 @@
                         </div>
                     </td>
                     <td>
-                        <button type="button" onclick="showEdit(<?= $event->id ?>)" data-mdb-toggle="modal" data-mdb-target="#editEvent" class="btn btn-link btn-rounded btn-sm fw-bold" data-mdb-ripple-color="dark" style="margin-bottom:15px;">
+                        <a href="{{ route('dashboard.checkin', $event->id) }}" class="btn btn-link btn-rounded btn-sm fw-bold text-warning">
+                            <i class="fas fa-check"></i>&nbsp Check
+                        </a>
+                        <button type="button" onclick="showEdit(<?= $event->id ?>)" data-mdb-toggle="modal" data-mdb-target="#editEvent" class="btn btn-link btn-rounded btn-sm fw-bold" data-mdb-ripple-color="dark" style="margin-bottom:10px;margin-top:10px">
                             <i class="fas fa-user-edit"></i>&nbsp Edit
                         </button>
                         <button type="button" onclick="deleteEvent(<?= $event->id ?>)" class="btn btn-link btn-rounded btn-sm fw-bold text-danger" data-mdb-ripple-color="dark">

@@ -45,3 +45,7 @@ Route::delete('/dashboard/event/{id}', [App\Http\Controllers\EventController::cl
 
 //addevent 
 Route::get('/dashboard/addEventView', [App\Http\Controllers\EventController::class, 'addEventView']);
+
+//checkin
+Route::get('dashboard/events/{id}/students', [App\Http\Controllers\CheckinController::class, 'showStudents'])->name('dashboard.checkin');
+

@@ -12,7 +12,7 @@
     <div class="card-body">
         <div class="table align-middle mb-0 bg-white table-bordered" style="border-radius:16px;">
             <div class="modal-body">
-                <form action="/dashboard/event/add" method="POST">
+                <form action="/dashboard/event/add" method="POST" enctype="multipart/form-data" id="addEventForm">
                     @csrf
                     <div class="form-group row">
                         <div class="col-sm-4">
@@ -50,7 +50,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <label for="image" class="col-sm-3 col-form-label">Image</label>
-                                <input class="form-control" type="file" id="image" name="image">
+                                <input type="file" class="form-control" id="image" name="image" accept="image">
                             </div>
                         </div>
                     </div>
@@ -70,20 +70,13 @@
     $(document).ready(function() {
         //add event
         $('#addEvent').on('click', function() {
+            var postData = new FormData($("#addEventForm")[0]);
             $.ajax({
                 type: "POST",
                 url: "/dashboard/event/add",
-                data: {
-                    name: $('#name').val(),
-                    description: $('#description').val(),
-                    location: $('#location').val(),
-                    faculty_id: $('#faculty_id').val(),
-                    start_at: $('#start_at').val(),
-                    end_at: $('#end_at').val(),
-                    image: $('#image').val(),
-                },
-                success: function(response) {
-                    console.log(response);
+                data: postData,
+                success: function(data) {
+                    console.log(data);
                     alert("Data Saved");
                     $('#addEventModal').modal('hide');
                     location.reload();

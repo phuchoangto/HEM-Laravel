@@ -26,8 +26,9 @@ class EventController extends Controller
         $event->start_at = $request->start_at;
         $event->end_at = $request->end_at;
         if ($request->hasFile('image')) {
-            $request->file('image')->storeAs('images/events', $event->id . '.jpg');
-            $event->image = 'images/events/' . $event->id . '.jpg';
+            $name = $request->file('image')->getClientOriginalName();
+            $request->file('image')->storeAs('images/events',  $name);
+            $event->image = 'images/events/' . $name;
         } else {
             $event->image = 'null';
         }
@@ -57,7 +58,7 @@ class EventController extends Controller
             'event' => $event
         ]);
     }
-    public function addEvent(AddEventRequest $request)
+    public function addEvent(Request $request)
     {
         $event = new Event();
         $event->name = $request->name;
@@ -65,7 +66,13 @@ class EventController extends Controller
         $event->location = $request->location;
         $event->start_at = $request->start_at;
         $event->end_at = $request->end_at;
-        $event->image = $request->image;
+        if ($request->hasFile('image')) {
+            $name = $request->file('image')->getClientOriginalName();
+            $request->file('image')->storeAs('images/events', $name);
+            $event->image = 'images/events/' . $name;
+        } else {
+            $event->image = 'null';
+        }
         $event->faculty_id = $request->faculty_id;
         $event->save();
         return response()->json([

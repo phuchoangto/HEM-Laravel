@@ -42,7 +42,7 @@
                         </div>
                         <div class="pt-1 col-sm-8">
                             <label for="description" class="form-label">Description</label>
-                            <textarea class="form-control" id="description" name="description" rows="9"></textarea>
+                            <textarea class="form-control" id="editor" name="description" rows="9"></textarea>
                         </div>
                         <div class="form-group row">
                             <div class="form-group col">
@@ -74,8 +74,23 @@
         </div>
     </div>
 </div>
-@endsection
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
+<script type="text/javascript">
+    ClassicEditor
+        .create(document.querySelector('#editor'), {
+            ckfinder: {
+                uploadUrl: "{{route('ckeditor.upload').'?_token='.csrf_token()}}",
+            },
+        })
+        .then(editor => {
+            console.log(editor);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script>
 <script>
     function selectImage() {
         $('#edit_image_save').click();
@@ -110,3 +125,4 @@
         });
     });
 </script>
+@endsection

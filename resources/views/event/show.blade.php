@@ -4,12 +4,10 @@
 
 @section('content')
 
-body {
-background-color: #f5f7fa;
-}
+
 
 <div class="container">
-    <section class="mx-auto my-5" style="max-width: 23rem;">
+    <section class="mx-auto my-5">
 
         <div class="card booking-card v-2 mt-2 mb-4 rounded-bottom">
             <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
@@ -25,7 +23,9 @@ background-color: #f5f7fa;
                     <li class="list-inline-item"><i class="fas fa-map-marker-alt"></i> {{$event->location}}</li>
                 </ul>
                 <hr class="my-4">
-                <p class="card-text">{{$event->description}}</p>
+                <div class="card-text">
+                    {!! htmlspecialchars_decode($event->description, ENT_NOQUOTES) !!}
+                </div>
                 <hr class="my-4">
                 <p class="h5 font-weight-bold mb-4">Opening hours</p>
                 <ul class="list-unstyled d-flex justify-content-start align-items-center mb-0">
@@ -55,4 +55,5 @@ background-color: #f5f7fa;
 
     </section>
 </div>
+
 @endsection

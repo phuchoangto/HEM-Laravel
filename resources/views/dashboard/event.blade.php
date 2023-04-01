@@ -98,6 +98,21 @@
 @endsection
 
 @section('js')
+<script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
+<script type="text/javascript">
+    ClassicEditor
+        .create(document.querySelector('#edit_description'), {
+            ckfinder: {
+                uploadUrl: "{{route('ckeditor.upload').'?_token='.csrf_token()}}",
+            },
+        })
+        .then(editor => {
+            console.log(editor);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script>
 <script>
     function showEdit(id) {
         $.ajax({
@@ -107,7 +122,15 @@
                 console.log(response);
                 $('#edit_id').val(response.id);
                 $('#edit_name').val(response.name);
-                $('#edit_description').val(response.description);
+                ClassicEditor.create(document.querySelector('#edit_description'), {
+                        ckfinder: {
+                            uploadUrl: "{{route('ckeditor.upload').'?_token='.csrf_token()}}",
+                        },
+                    })
+                    .then(editor => {
+                        const string = response.description;
+                        editor.setData(string);
+                    })
                 $('#edit_faculty_id').val(response.faculty_id);
                 $('#edit_location').val(response.location);
                 $('#edit_start_at').val(response.start_at);

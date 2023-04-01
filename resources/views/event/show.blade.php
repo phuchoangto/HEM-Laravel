@@ -4,48 +4,55 @@
 
 @section('content')
 
-<div class="container mt-3">
-    <div class="row">
-        <div class="col-8">
-            <div class="card h-100">
-                <img src="{{{Storage::url($event->image)}}}">
-                <div class="card-body">
-                    <h5 class="card-title">Name: {{$event->name}}</h5>
-                </div>
+body {
+background-color: #f5f7fa;
+}
 
-                <ul class="list-group list-group-light list-group-small">
-                    <li class="list-group-item px-4">Falcuty: {{$event->faculty_id}}</li>
-                    <li class="list-group-item px-4">Description: {{$event->description}}</li>
-                    <li class="list-group-item px-4">Location: {{$event->location}}</li>
-                </ul>
-                <div class="card-footer text-muted">
-                    {{Carbon\Carbon::parse($event->start_at)->diffForHumans()}}
-                </div>
+<div class="container">
+    <section class="mx-auto my-5" style="max-width: 23rem;">
+
+        <div class="card booking-card v-2 mt-2 mb-4 rounded-bottom">
+            <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+                <img src="{{{Storage::url($event->image)}}}" class="img-fluid">
+                <a href="#!">
+                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                </a>
             </div>
-        </div>
-        <div class="col-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Event info</h5>
-                </div>
-                <ul class="list-group list-group-light list-group-small">
-                    <li class="list-group-item px-4">
-                        <i class="fas fa-id-card-alt"></i>
-                        Faculty: {{$event->faculty->name}}
+            <div class="card-body">
+                <h4 class="card-title font-weight-bold"><a>{{$event->name}}</a></h4>
+                <ul class="list-unstyled list-inline mb-2">
+                    <li class="list-inline-item"><i class="fas fa-graduation-cap"></i> {{$event->faculty->name}}</li> <br>
+                    <li class="list-inline-item"><i class="fas fa-map-marker-alt"></i> {{$event->location}}</li>
+                </ul>
+                <hr class="my-4">
+                <p class="card-text">{{$event->description}}</p>
+                <hr class="my-4">
+                <p class="h5 font-weight-bold mb-4">Opening hours</p>
+                <ul class="list-unstyled d-flex justify-content-start align-items-center mb-0">
+                    <li>
+                        Start at: {{Carbon\Carbon::parse($event->start_at)->format('l d/m/Y')}}
                     </li>
-                    <li class="list-group-item px-4">
-                        <i class="fas fa-calendar-alt"></i>
-                        Start at: {{Carbon\Carbon::parse($event->start_at)->format('d/m/Y H:i')}}
-                    </li>
-                    <li class="list-group-item px-4">
-                        <i class="fas fa-calendar-alt"></i>
-                        End at: {{Carbon\Carbon::parse($event->end_at)->format('d/m/Y H:i')}}
+
+                    <li>
+                        <div class="chip ms-3">
+                            {{ Carbon\Carbon::parse($event->start_at)->format('h:i A') }}
+                        </div>
                     </li>
                 </ul>
+                <ul class="list-unstyled d-flex justify-content-start align-items-center mb-0">
+                    <li>
+                        End at: {{Carbon\Carbon::parse($event->end_at)->format('l d/m/Y')}}
+                    </li>
+
+                    <li>
+                        <div class="chip ms-3">
+                            {{ Carbon\Carbon::parse($event->end_at)->format('h:i A') }}
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
-    </div>
 
+    </section>
 </div>
-
 @endsection

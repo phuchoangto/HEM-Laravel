@@ -54,3 +54,7 @@ Route::get('dashboard/events/{id}/students/export', [App\Http\Controllers\Checki
 
 //ckeditor
 Route::get('/ckeditor', [App\Http\Controllers\CkeditorController::class, 'index']);
+
+// chatgpt
+Route::get('/chatgpt', [App\Http\Controllers\ChatGPTController::class, 'getView']);
+Route::post('/chatgpt/response', [App\Http\Controllers\ChatGPTController::class, 'getResponse']);

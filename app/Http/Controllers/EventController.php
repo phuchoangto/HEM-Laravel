@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AddEventRequest;
 use App\Http\Requests\EditEventRequest;
 use App\Models\Event;
+use App\Models\Faculty;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -83,6 +84,7 @@ class EventController extends Controller
     //addEventview
     public function addEventView()
     {
-        return view('dashboard.addEventView');
+        $faculties = Faculty::all();
+        return view('dashboard.addEventView', ['faculties' => $faculties]);
     }
 }

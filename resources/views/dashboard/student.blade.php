@@ -48,13 +48,17 @@
     <nav aria-label="Page navigation example" style="margin-right:5px; padding-top:15px;">
         <ul class="pagination justify-content-end">
             <li class="page-item {{ $students->previousPageUrl() ? '' : 'disabled' }}">
-                <a class="page-link" href="{{ $students->previousPageUrl() }}" tabindex="-1" aria-disabled="{{ $students->previousPageUrl() ? 'false' : 'true' }}">Previous</a>
+                @if($students->currentPage() >= 2)
+                <a class="page-link" href="student?page={{ $students->currentPage() - 1}}" tabindex="-1" aria-disabled="{{ $students->previousPageUrl() ? 'false' : 'true' }}">Previous</a>
+                @endif
             </li>
             @for($i=1;$i<=$students->lastPage();$i++)
-                <li class="page-item {{ $students->currentPage() == $i ? 'active' : '' }} "><a class="page-link" href="{{ $students->url($i) }}">{{ $i }}</a></li>
+                <li class="page-item {{ $students->currentPage() == $i ? 'active' : '' }} "><a class="page-link" href="/dashboard/student?page={{$i}}">{{ $i }}</a></li>
                 @endfor
                 <li class="page-item {{ $students->nextPageUrl() ? '' : 'disabled' }}">
-                    <a class="page-link" href="{{ $students->nextPageUrl() }}" aria-disabled="{{ $students->nextPageUrl() ? 'false' : 'true' }}">Next</a>
+                    @if($students->currentPage() < $students->lastPage())
+                        <a class="page-link" href="student?page={{ $students->currentPage() + 1}}" aria-disabled="{{ $students->nextPageUrl() ? 'false' : 'true' }}">Next</a>
+                        @endif
                 </li>
         </ul>
     </nav>
@@ -87,8 +91,13 @@
                         <input type="email" class="form-control" id="email" name="email" />
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label">Faculty</label>
-                        <input type="number" class="form-control" id="faculty_id" name="faculty_id" />
+                        <label for="faculty" class="form-label">Faculty</label>
+                        <select class="form-select" id="faculty_id" name="faculty_id">
+                            <option selected>Choose...</option>
+                            @foreach($faculties as $faculty)
+                            <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="modal-footer">
@@ -127,7 +136,12 @@
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Faculty</label>
-                        <input type="number" class="form-control" id="edit_faculty_id" name="faculty_id" />
+                        <select class="form-select" id="edit_faculty_id" name="faculty_id">
+                            <option selected>Choose...</option>
+                            @foreach($faculties as $faculty)
+                            <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="modal-footer">

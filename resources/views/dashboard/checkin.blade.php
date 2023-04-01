@@ -4,11 +4,11 @@
 
 @section('css')
 <style>
-    #studenttd td p{
+    #studenttd td p {
         margin-bottom: 0 !important;
     }
 
-    #btn-certificate:hover{
+    #btn-certificate:hover {
         background-color: #FFBB33 !important;
         color: white !important;
     }
@@ -16,7 +16,7 @@
 @endsection
 
 @section('content')
-<button type="submit" class="btn btn-primary" id="export-btn">Xuất dữ liệu</button>
+<button type="submit" class="btn btn-primary" id="export-btn"> Xuất dữ liệu</button>
 <div class="card">
     <div class="card-body p-0">
         <table class="table align-middle mb-0 bg-white table-bordered" style="width:100%;">
@@ -72,28 +72,30 @@
 
 @section('js')
 <script>
-$(document).ready(function() {
-  $('#export-btn').click(function() {
-        $.ajax({
-            url: '/dashboard/events/' + '{{ $event->id }}' + '/students/export',
-            method: 'GET',
-            action: 'exportStudents',
-            success: function(data) {
-                var csvData = new Blob([data], { type: 'text/csv;charset=utf-8;' });
-                var csvUrl = URL.createObjectURL(csvData);
-                var link = document.createElement('a');
-                link.href = csvUrl;
-                link.download = 'students.csv';
-                link.style.display = 'none';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            },
-            error: function(error) {
-                console.log(error);
-            }
+    $(document).ready(function() {
+        $('#export-btn').click(function() {
+            $.ajax({
+                url: '/dashboard/events/' + '{{ $event->id }}' + '/students/export',
+                method: 'GET',
+                action: 'exportStudents',
+                success: function(data) {
+                    var csvData = new Blob([data], {
+                        type: 'text/csv;charset=utf-8;'
+                    });
+                    var csvUrl = URL.createObjectURL(csvData);
+                    var link = document.createElement('a');
+                    link.href = csvUrl;
+                    link.download = 'students.csv';
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
         });
     });
-}); 
 </script>
 @endsection

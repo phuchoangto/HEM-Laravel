@@ -48,13 +48,17 @@
     <nav aria-label="Page navigation example" style="margin-right:5px; padding-top:15px;">
         <ul class="pagination justify-content-end">
             <li class="page-item {{ $users->previousPageUrl() ? '' : 'disabled' }}">
-                <a class="page-link" href="{{ $users->previousPageUrl() }}" tabindex="-1" aria-disabled="{{ $users->previousPageUrl() ? 'false' : 'true' }}">Previous</a>
+                @if($users->currentPage() >= 2)
+                <a class="page-link" href="user?page={{ $users->currentPage() - 1}}" tabindex="-1" aria-disabled="{{ $users->previousPageUrl() ? 'false' : 'true' }}">Previous</a>
+                @endif
             </li>
             @for($i=1;$i<=$users->lastPage();$i++)
-                <li class="page-item {{ $users->currentPage() == $i ? 'active' : '' }} "><a class="page-link" href="{{ $users->url($i) }}">{{ $i }}</a></li>
+                <li class="page-item {{ $users->currentPage() == $i ? 'active' : '' }} "><a class="page-link" href="/dashboard/user?page={{$i}}">{{ $i }}</a></li>
                 @endfor
                 <li class="page-item {{ $users->nextPageUrl() ? '' : 'disabled' }}">
-                    <a class="page-link" href="{{ $users->nextPageUrl() }}" aria-disabled="{{ $users->nextPageUrl() ? 'false' : 'true' }}">Next</a>
+                    @if($users->currentPage() < $users->lastPage())
+                        <a class="page-link" href="user?page={{ $users->currentPage() + 1}}" aria-disabled="{{ $users->nextPageUrl() ? 'false' : 'true' }}">Next</a>
+                        @endif
                 </li>
         </ul>
     </nav>

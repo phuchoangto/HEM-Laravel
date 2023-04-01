@@ -38,15 +38,14 @@ Route::put('/dashboard/user/{id}', [App\Http\Controllers\UserController::class, 
 Route::delete('/dashboard/user/{id}', [App\Http\Controllers\UserController::class, 'deleteUser']);
 
 //event
-Route::post('/dashboard/event/add', [App\Http\Controllers\EventController::class, 'addEvent']);
 Route::get('/dashboard/event/{id}', [App\Http\Controllers\EventController::class, 'getOneEvent']);
 Route::post('/dashboard/event/{id}', [App\Http\Controllers\EventController::class, 'editEvent']);
 Route::delete('/dashboard/event/{id}', [App\Http\Controllers\EventController::class, 'deleteEvent']);
 
 //addevent 
 Route::get('/dashboard/addEventView', [App\Http\Controllers\EventController::class, 'addEventView']);
+Route::post('/dashboard/addEventView', [App\Http\Controllers\EventController::class, 'addEvent']);
 
 //checkin
 Route::get('dashboard/events/{id}/students', [App\Http\Controllers\CheckinController::class, 'showStudents'])->name('dashboard.checkin');
-Route::get('dashboard/events/{id}/students/export', [App\Http\Controllers\CheckinController::class, 'exportStudents' ])->name('dashboard.checkin.export');
-
+Route::get('dashboard/events/{id}/students/export', [App\Http\Controllers\CheckinController::class, 'exportStudents'])->name('dashboard.checkin.export');

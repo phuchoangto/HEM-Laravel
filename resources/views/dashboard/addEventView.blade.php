@@ -12,7 +12,7 @@
     <div class="card-body">
         <div class="table align-middle mb-0 bg-white table-bordered" style="border-radius:16px;">
             <div class="modal-body">
-                <form action="/dashboard/event/add" method="POST" enctype="multipart/form-data" id="addEventForm">
+                <form action="/dashboard/addEventView" method="POST" enctype="multipart/form-data" id="addEventForm">
                     @csrf
                     <div class="form-group row">
                         <div class="col-sm-4">
@@ -25,7 +25,12 @@
                             <div class="form-group row">
                                 <div class="col-sm-12">
                                     <label for="faculty_id" class="col-sm-3 col-form-label">Faculty</label>
-                                    <input type="number" class="form-control" id="faculty_id" name="faculty_id" placeholder="Enter Faculty">
+                                    <select class="form-select" id="faculty_id" name="faculty_id">
+                                        <option selected>Choose...</option>
+                                        @foreach($faculties as $faculty)
+                                        <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -40,17 +45,22 @@
                             <textarea class="form-control" id="description" name="description" rows="9"></textarea>
                         </div>
                         <div class="form-group row">
-                            <div class="col-sm-3">
-                                <label for="start_at" class="col-sm-3 col-form-label">Start at</label>
-                                <input type="datetime-local" class="form-control" id="start_at" name="start_at">
+                            <div class="form-group col">
+                                <div class="col-sm-5">
+                                    <label for="start_at" class="col-sm-3 col-form-label">Start at</label>
+                                    <input type="datetime-local" class="form-control" id="start_at" name="start_at">
+                                </div>
+                                <div class="col-sm-5">
+                                    <label for="end_at" class="col-sm-3 col-form-label">End at</label>
+                                    <input type="datetime-local" class="form-control" id="end_at" name="end_at">
+                                </div>
+
                             </div>
-                            <div class="col-sm-3">
-                                <label for="end_at" class="col-sm-3 col-form-label">End at</label>
-                                <input type="datetime-local" class="form-control" id="end_at" name="end_at">
-                            </div>
-                            <div class="col-sm-6">
-                                <label for="image" class="col-sm-3 col-form-label">Image</label>
-                                <input type="file" class="form-control" id="image" name="image" accept="image">
+                            <div class="col-sm-6 mt-3">
+                                <div style="object-fit:cover; text-align: left;">
+                                    <img onclick="selectImage()" id="edit_image" name="edit_image" style="width:220px;height:180px;" />
+                                    <input type="file" class="form-control" id="edit_image_save" name="image" accept="image" style="display: none;">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -67,25 +77,34 @@
 @endsection
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    function selectImage() {
+        $('#edit_image_save').click();
+        $('#edit_image_save').change(function() {
+            var file = this.files[0];
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#edit_image').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(file);
+        });
+    }
     $(document).ready(function() {
         //add event
-        $('#addEvent').on('click', function() {
+        $('#addEventForm').submit(function(e) {
+            e.preventDefault();
             var postData = new FormData($("#addEventForm")[0]);
             $.ajax({
                 type: "POST",
-                url: "/dashboard/event/add",
+                url: "/dashboard/addEventView",
                 data: postData,
+                processData: false,
+                contentType: false,
                 success: function(data) {
                     console.log(data);
-                    alert("Data Saved");
-                    $('#addEventModal').modal('hide');
-                    location.reload();
+                    window.location.href = "/dashboard/event";
                 },
-                error: function(error) {
-                    console.log(error);
-                    alert("Data Not Saved");
-                    $('#addEventModal').modal('hide');
-                    location.reload();
+                error: function(data) {
+                    console.log(data);
                 }
             });
         });

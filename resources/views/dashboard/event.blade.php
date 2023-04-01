@@ -1,5 +1,5 @@
 @extends('dashboard')
-
+@inject('carbon', 'Carbon\Carbon')
 @section('title', 'Event')
 
 @section('content')
@@ -48,7 +48,11 @@
                     <td>
                         <div>
                             <div class="float-left">
-                                <p class="text-muted mb-0">{{ $event->start_at }} </br> {{ $event->end_at}}</p>
+                                <p class="text-muted mb-0">
+                                    {{ $carbon::parse($event->start_at)->format('d/m/Y H:i') }}
+                                    <br><br>
+                                    {{ $carbon::parse($event->end_at)->format('d/m/Y H:i') }}
+                                </p>
                             </div>
                     </td>
                     <td>
@@ -57,7 +61,7 @@
                         </div>
                     </td>
                     <td>
-                        <a href="{{ route('dashboard.checkin', $event->id) }}" class="btn btn-link btn-rounded btn-sm fw-bold text-warning">
+                        <a href="/dashboard/events/{{$event->id}}/students" class="btn btn-link btn-rounded btn-sm fw-bold text-warning">
                             <i class="fas fa-check"></i>&nbsp Check
                         </a>
                         <button type="button" onclick="showEdit(<?= $event->id ?>)" data-mdb-toggle="modal" data-mdb-target="#editEvent" class="btn btn-link btn-rounded btn-sm fw-bold" data-mdb-ripple-color="dark" style="margin-bottom:10px;margin-top:10px">
@@ -76,13 +80,17 @@
     <nav aria-label="Page navigation example" style="margin-right:5px; padding-top:15px;">
         <ul class="pagination justify-content-end">
             <li class="page-item {{ $events->previousPageUrl() ? '' : 'disabled' }}">
-                <a class="page-link" href="{{ $events->previousPageUrl() }}" tabindex="-1" aria-disabled="{{ $events->previousPageUrl() ? 'false' : 'true' }}">Previous</a>
+                @if($events->currentPage() >= 2)
+                <a class="page-link" href="event?page={{ $events->currentPage() - 1}}" tabindex="-1" aria-disabled="{{ $events->previousPageUrl() ? 'false' : 'true' }}">Previous</a>
+                @endif
             </li>
             @for($i=1;$i<=$events->lastPage();$i++)
-                <li class="page-item {{ $events->currentPage() == $i ? 'active' : '' }} "><a class="page-link" href="{{ $events->url($i) }}">{{ $i }}</a></li>
+                <li class="page-item {{ $events->currentPage() == $i ? 'active' : '' }} "><a class="page-link" href="/dashboard/event?page={{$i}}">{{ $i }}</a></li>
                 @endfor
                 <li class="page-item {{ $events->nextPageUrl() ? '' : 'disabled' }}">
-                    <a class="page-link" href="{{ $events->nextPageUrl() }}" aria-disabled="{{ $events->nextPageUrl() ? 'false' : 'true' }}">Next</a>
+                    @if($events->currentPage() < $events->lastPage())
+                        <a class="page-link" href="event?page={{ $events->currentPage() + 1}}" aria-disabled="{{ $events->nextPageUrl() ? 'false' : 'true' }}">Next</a>
+                        @endif
                 </li>
         </ul>
     </nav>
@@ -131,21 +139,16 @@
         });
     }
 
-
     function selectImage() {
-        // Mở hộp tệp để chọn ảnh mới
-        $('<input type="file"> accept="image/*">').on('change', function() {
-            // Đảm bảo rằng tệp được chọn là một hình ảnh
-            if (this.files[0].type.match(/^image\//)) {
-                // Đọc URL của tệp được chọn
-                var reader = new FileReader();
-                reader.onload = function() {
-                    // Cập nhật src của thẻ hình ảnh để hiển thị ảnh mới
-                    $('#edit_image').attr('src', reader.result);
-                };
-                reader.readAsDataURL(this.files[0]);
+        $('#edit_image_save').click();
+        $('#edit_image_save').change(function() {
+            var file = this.files[0];
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#edit_image').attr('src', e.target.result);
             }
-        }).click();
+            reader.readAsDataURL(file);
+        });
     }
     $(document).ready(function() {
         $('#editEvent').submit(function(e) {
@@ -200,7 +203,12 @@
                     </div>
                     <div class="mb-3">
                         <label for="faculty_id" class="form-label">Faculty</label>
-                        <input type="text" class="form-control" id="edit_faculty_id" name="faculty_id" placeholder="Enter Faculty ID">
+                        <select class="form-select" id="edit_faculty_id" name="faculty_id">
+                            <option selected>Choose...</option>
+                            @foreach($faculties as $faculty)
+                            <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="start_at" class="form-label">Start at</label>
@@ -210,12 +218,9 @@
                         <label for="end_at" class="form-label">End at</label>
                         <input type="datetime-local" class="form-control" id="edit_end_at" name="end_at">
                     </div>
-                    <!-- <div style="object-fit:cover; text-align: center;">
+                    <div style="object-fit:cover; text-align: center;">
                         <img onclick="selectImage()" id="edit_image" name="edit_image" style="width:220px;height:180px;" />
-                    </div> -->
-                    <div class="mb-3">
-                        <label for="image" class="form-label">Image</label>
-                        <input type="file" class="form-control" id="edit_image" name="image" accept="image">
+                        <input type="file" class="form-control" id="edit_image_save" name="image" accept="image" style="display: none;">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>

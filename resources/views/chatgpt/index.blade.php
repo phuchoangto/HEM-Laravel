@@ -912,7 +912,7 @@
                     url: 'https://api.openai.com/v1/chat/completions',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer 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'
+                        'Authorization': 'Bearer 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'
                     },
                     data: JSON.stringify({
                         'model': 'gpt-3.5-turbo',

@@ -18,7 +18,9 @@
             $students = $event->students()->paginate(5);
             return view('dashboard.checkin', compact('event', 'students'));
         }
-        
+
+        //encoding csv file before download using utf-8 format to avoid encoding problem especially in excel with vietnamese language
+
         public function exportStudents($id)
         {
             $event = Event::find($id);
@@ -27,7 +29,7 @@
             }
 
             $students = $event->students()->withPivot('check_in_at')->get();
-            $csv = Writer::createFromString('');
+            $csv = Writer::createFromFileObject(new \SplTempFileObject());
             $csv->setOutputBOM(Writer::BOM_UTF8); // add BOM to the CSV file
             $csv->insertOne(['id', 'name', 'email', 'check_in_at', 'event_name' ]);
             foreach ($students as $student) {
@@ -37,7 +39,7 @@
                     $student->name,
                     $student->email,
                     $checkInDate->format('Y-m-d H:i:s'),
-                    $event->name
+                    mb_convert_encoding($event->name, 'SJIS', 'auto')
                 ]);
             }
 
@@ -46,6 +48,9 @@
             return response($csv->toString(), 200, [
                 'Content-Type' => 'text/csv',
                 'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+                'Content-Encoding'=> 'SHIFT-JIS'
             ]);
         }
+        
+     
     }

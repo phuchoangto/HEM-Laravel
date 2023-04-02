@@ -17,7 +17,7 @@
 
 @section('content')
 <button type="submit" class="btn btn-primary" id="export-btn"> Xuất dữ liệu</button>
-<div class="card">
+<div class="card mt-3">
     <div class="card-body p-0">
         <table class="table align-middle mb-0 bg-white table-bordered" style="width:100%;">
             <thead class="bg-light">
@@ -45,7 +45,7 @@
                         <p>{{ $student->pivot->check_in_at }}</p>
                     </td>
                     <td style="text-align: center;">
-                        <button id="btn-certificate" type="submit" class="btn btn-outline-warning btn-rounded btn-sm fw-bold text-warning">
+                        <button id="btn-certificate" class="btn btn-outline-warning btn-rounded btn-sm fw-bold text-warning">
                             <i class="fas fa-certificate"></i>&nbsp Get Certificate
                         </button>
                     </td>
@@ -90,6 +90,31 @@
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
+        $('#btn-certificate').click(function() {
+            var id = $(this).closest('tr').data('id');
+            $.ajax({
+                url: '/dashboard/events/' + '{{ $event->id }}' + '/students/' + id + '/certificate',
+                method: 'GET',
+                action: 'getCertificate',
+                success: function(data) {
+                    var csvData = new Blob([data], {
+                        type: 'text/csv;charset=utf-8;'
+                    });
+                    var csvUrl = URL.createObjectURL(csvData);
+                    var link = document.createElement('a');
+                    link.href = csvUrl;
+                    link.download = 'students.csv';
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    console.log(data);
                 },
                 error: function(error) {
                     console.log(error);

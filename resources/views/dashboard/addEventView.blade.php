@@ -125,30 +125,41 @@
         //add event
         $('#addEventForm').submit(function(e) {
             e.preventDefault();
-            var postData = new FormData($("#addEventForm")[0]);
-            $.ajax({
-                type: "POST",
-                url: "/dashboard/addEventView",
-                data: postData,
-                processData: false,
-                contentType: false,
-                success: function(data) {
-                    Swal.fire({
-                        title: 'Added!',
-                        confirmButtonText: 'OK',
-                        icon: 'success',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            console.log(data);
-                            window.location.href = "/dashboard/event";
-                        }
-                    })
+            var startAt = new Date($('#start_at').val()).getTime();
+            var endAt = new Date($('#end_at').val()).getTime();
+            if (startAt >= endAt) {
+                Swal.fire({
+                    title: 'Start time must be earlier than end time',
+                    confirmButtonText: 'OK',
+                    icon: 'warning',
+                });
+            } else {
+                var postData = new FormData($("#addEventForm")[0]);
+                $.ajax({
+                    type: "POST",
+                    url: "/dashboard/addEventView",
+                    data: postData,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        Swal.fire({
+                            title: 'Added!',
+                            confirmButtonText: 'OK',
+                            icon: 'success',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                console.log(data);
+                                window.location.href = "/dashboard/event";
+                            }
+                        })
 
-                },
-                error: function(data) {
-                    console.log(data);
-                }
-            });
+                    },
+                    error: function(data) {
+                        console.log(data);
+                    }
+                });
+            }
+
         });
     });
 </script>

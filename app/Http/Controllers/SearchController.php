@@ -8,22 +8,49 @@ use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $checkins = Checkin::all();
-        return view('home.search', ['checkins' => $checkins]);
+        $checkins = Checkin::query();
+        $flag = false;
+        if ($request->has('search')) {
+            $search = $request->search;
+            $checkins->whereHas('student', function ($query) use ($search) {
+                $query->where('name', 'LIKE', '%' . $search . '%');
+            });
+        }
+
+        $checkins = $checkins->with('student', 'event')->paginate(10);
+
+        return view('home.search', ['checkins' => $checkins, 'flag' => $flag]);
     }
 
 
+    // public function search(Request $request)
+    // {
+    //     $flag = false;
+    //     $search = $request->search;
+    //     if ($request->search != null) {
+    //         $checkins = Checkin::whereHas('student', function ($query) use ($search) {
+    //             $query->where('student_id', $search);
+    //         })->with('student', 'event')->get()->paginate(6);
+    //         $flag = true;
+    //     } else
+    //         $checkins = Checkin::all()->paginate(6);
+    //     return view('home.search', ['checkins' => $checkins, 'flag' => $flag]);
+    // }
     public function search(Request $request)
     {
+        $flag = false;
         $search = $request->search;
-        if ($request->search != null)
+        if ($request->search != null) {
             $checkins = Checkin::whereHas('student', function ($query) use ($search) {
                 $query->where('student_id', $search);
-            })->with('student', 'event')->get();
-        else
-            $checkins = Checkin::all();
-        return view('home.search', ['checkins' => $checkins]);
+            })->with('student', 'event')->paginate(6);
+            $flag = true;
+        } else {
+            $checkins = Checkin::with('student', 'event')->paginate(6);
+        }
+
+        return view('home.search', ['checkins' => $checkins, 'flag' => $flag]);
     }
 }

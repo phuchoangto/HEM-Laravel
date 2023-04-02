@@ -22,38 +22,45 @@ class EventController extends Controller
 
     public function editEvent(Request $request, $id)
     {
-        if (!$request->hasFile('image')) {
-            $event = Event::find($id);
-            $event->name = $request->name;
-            $event->description = $request->description;
-            $event->location = $request->location;
-            $event->start_at = $request->start_at;
-            $event->end_at = $request->end_at;
-            $event->faculty_id = $request->faculty_id;
-            $event->save();
-            return response()->json([
-                'message' => 'Event edited successfully',
-                'event' => $event
-            ]);
-        } else {
-            $event = Event::find($id);
-            $event->name = $request->name;
-            $event->description = $request->description;
-            $event->location = $request->location;
-            $event->start_at = $request->start_at;
-            $event->end_at = $request->end_at;
-            if ($request->hasFile('image')) {
-                $name = $request->file('image')->getClientOriginalName();
-                $request->file('image')->storeAs('images/events',  $name);
-                $event->image = 'images/events/' . $name;
+        if ($request->start_at > $request->end_at)
+            if (!$request->hasFile('image')) {
+                $event = Event::find($id);
+                $event->name = $request->name;
+                $event->description = $request->description;
+                $event->location = $request->location;
+                $event->start_at = $request->start_at;
+                $event->end_at = $request->end_at;
+                $event->faculty_id = $request->faculty_id;
+                $event->save();
+                return response()->json([
+                    'message' => 'Event edited successfully',
+                    'event' => $event
+                ]);
             } else {
-                $event->image = 'null';
+                $event = Event::find($id);
+                $event->name = $request->name;
+                $event->description = $request->description;
+                $event->location = $request->location;
+                $event->start_at = $request->start_at;
+                $event->end_at = $request->end_at;
+
+                if ($request->hasFile('image')) {
+                    $name = $request->file('image')->getClientOriginalName();
+                    $request->file('image')->storeAs('images/events',  $name);
+                    $event->image = 'images/events/' . $name;
+                } else {
+                    $event->image = 'null';
+                }
+                $event->faculty_id = $request->faculty_id;
+                $event->save();
+                return response()->json([
+                    'message' => 'Event edited successfully',
+                    'event' => $event
+                ]);
             }
-            $event->faculty_id = $request->faculty_id;
-            $event->save();
+        else {
             return response()->json([
-                'message' => 'Event edited successfully',
-                'event' => $event
+                'message' => 'Event edited failed',
             ]);
         }
     }

@@ -211,6 +211,7 @@
         })
     }
 
+
     function selectImage() {
         $('#edit_image_save').click();
         $('#edit_image_save').change(function() {
@@ -225,30 +226,41 @@
     $(document).ready(function() {
         $('#editEvent').submit(function(e) {
             e.preventDefault();
-            var postData = new FormData($("#editEventForm")[0]);
-            var id = $('#edit_id').val();
-            $.ajax({
-                type: "POST",
-                url: "/dashboard/event/" + id,
-                data: postData,
-                processData: false,
-                contentType: false,
-                success: function(data) {
-                    Swal.fire({
-                        title: 'Saved!',
-                        confirmButtonText: 'OK',
-                        icon: 'success',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            $('#editEvent').modal('hide');
-                            location.reload();
-                        }
-                    })
-                },
-                error: function(data) {
-                    console.log(data);
-                }
-            });
+            var startAt = new Date($('#edit_start_at').val()).getTime();
+            var endAt = new Date($('#edit_end_at').val()).getTime();
+            if (startAt >= endAt) {
+                Swal.fire({
+                    title: 'Start time must be earlier than end time',
+                    confirmButtonText: 'OK',
+                    icon: 'warning',
+                });
+            } else {
+                var postData = new FormData($("#editEventForm")[0]);
+                var id = $('#edit_id').val();
+                $.ajax({
+                    type: "POST",
+                    url: "/dashboard/event/" + id,
+                    data: postData,
+                    processData: false,
+                    contentType: false,
+                    success: function(data) {
+                        Swal.fire({
+                            title: 'Saved!',
+                            confirmButtonText: 'OK',
+                            icon: 'success',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $('#editEvent').modal('hide');
+                                location.reload();
+                            }
+                        })
+                    },
+                    error: function(data) {
+                        console.log(data);
+                    }
+                });
+            }
+
         });
 
     });

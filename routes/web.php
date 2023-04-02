@@ -45,8 +45,16 @@ Route::delete('/dashboard/event/{id}', [App\Http\Controllers\EventController::cl
 //addevent 
 Route::get('/dashboard/addEventView', [App\Http\Controllers\EventController::class, 'addEventView']);
 Route::post('/dashboard/addEventView', [App\Http\Controllers\EventController::class, 'addEvent']);
-Route::post('/dashboard/addEventView/post', [App\Http\Controllers\EventController::class, 'upload'])->name('ckeditor.upload');
+Route::post('/dashboard/upload', [App\Http\Controllers\EventController::class, 'upload'])->name('ckeditorUpload');
 
+//statis
+Route::get('/dashboard/statis', [App\Http\Controllers\StatisController::class, 'index']);
+Route::get('/dashboard/statis/eventCount', [App\Http\Controllers\StatisController::class, 'getEventCount']);
+Route::get('/dashboard/statis/eventCountUpcoming', [App\Http\Controllers\StatisController::class, 'getEventCountUpcoming']);
+Route::get('/dashboard/statis/eventCountCurrent', [App\Http\Controllers\StatisController::class, 'getEventCountCurrent']);
+Route::get('/dashboard/statis/checkinCount', [App\Http\Controllers\StatisController::class, 'getCheckinCount']);
+Route::get('/dashboard/statis/facultyCount', [App\Http\Controllers\StatisController::class, 'getFacultyCount']);
+Route::get('/dashboard/statis/studentCount', [App\Http\Controllers\StatisController::class, 'getStudentCount']);
 
 //checkin
 Route::get('dashboard/events/{id}/students', [App\Http\Controllers\CheckinController::class, 'showStudents'])->name('dashboard.checkin');
@@ -54,3 +62,8 @@ Route::get('dashboard/events/{id}/students/export', [App\Http\Controllers\Checki
 
 //ckeditor
 Route::get('/ckeditor', [App\Http\Controllers\CkeditorController::class, 'index']);
+
+//search
+Route::get('/search', [App\Http\Controllers\SearchController::class, 'index']);
+Route::post('/search/student', [App\Http\Controllers\SearchController::class, 'search']);
+Route::get('/search/student', [App\Http\Controllers\SearchController::class, 'search']);

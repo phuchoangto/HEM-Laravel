@@ -134,6 +134,7 @@
 </div>
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function showEdit(id) {
         $.ajax({
@@ -151,21 +152,40 @@
     }
 
     function deleteUser(id) {
-        $.ajax({
-            type: "DELETE",
-            url: "/dashboard/user/" + id,
-            data: {
-                _token: "{{ csrf_token() }}"
-            },
-            success: function(response) {
-                alert(response.message);
-                console.log(response);
-                location.reload();
-            },
-            error: function(response) {
-                console.log(response);
+        Swal.fire({
+            title: 'Do you want to delete this user?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            denyButtonText: 'No',
+            customClass: {
+                actions: 'my-actions',
+                cancelButton: 'order-1 right-gap',
+                confirmButton: 'order-2',
+                denyButton: 'order-3',
             }
-        });
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire('Deleted!', '', 'success')
+                $.ajax({
+                    type: "DELETE",
+                    url: "/dashboard/user/" + id,
+                    data: {
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        location.reload();
+                    },
+                    error: function(response) {
+                        console.log(response);
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.fire('User os not deleted', '', 'info')
+            }
+        })
+
     }
 
     $(document).ready(function() {
@@ -182,10 +202,18 @@
                     _token: "{{ csrf_token() }}"
                 },
                 success: function(response) {
-                    alert(response.message);
-                    console.log(response);
-                    $('#addUser').modal('hide');
-                    location.reload();
+                    Swal.fire({
+                        title: 'Added!',
+                        confirmButtonText: 'OK',
+                        icon: 'success',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            console.log(response);
+                            $('#addUser').modal('hide');
+                            location.reload();
+                        }
+                    })
+
                 },
                 error: function(response) {
                     console.log(response);
@@ -206,10 +234,17 @@
                     _token: "{{ csrf_token() }}"
                 },
                 success: function(response) {
-                    alert(response.message);
-                    console.log(response);
-                    $('#editUser').modal('hide');
-                    location.reload();
+                    Swal.fire({
+                        title: 'Saved!',
+                        confirmButtonText: 'OK',
+                        icon: 'success',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            console.log(response);
+                            $('#editUser').modal('hide');
+                            location.reload();
+                        }
+                    })
                 },
                 error: function(response) {
                     console.log(response);

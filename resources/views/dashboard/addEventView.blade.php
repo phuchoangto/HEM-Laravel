@@ -81,7 +81,24 @@
     ClassicEditor
         .create(document.querySelector('#editor'), {
             ckfinder: {
-                uploadUrl: "{{route('ckeditor.upload').'?_token='.csrf_token()}}",
+                uploadUrl: '/dashboard/upload?_token={{ csrf_token() }}',
+            },
+            toolbar: {
+                items: [
+                    'heading',
+                    '|',
+                    'bold',
+                    'italic',
+                    '|',
+                    'uploadImage',
+                    'bulletedList',
+                    'numberedList',
+                    'blockQuote',
+                    'insertTable',
+                    'mediaEmbed',
+                    'undo',
+                    'redo'
+                ]
             },
         })
         .then(editor => {
@@ -91,6 +108,7 @@
             console.error(error);
         });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function selectImage() {
         $('#edit_image_save').click();
@@ -115,8 +133,17 @@
                 processData: false,
                 contentType: false,
                 success: function(data) {
-                    console.log(data);
-                    window.location.href = "/dashboard/event";
+                    Swal.fire({
+                        title: 'Added!',
+                        confirmButtonText: 'OK',
+                        icon: 'success',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            console.log(data);
+                            window.location.href = "/dashboard/event";
+                        }
+                    })
+
                 },
                 error: function(data) {
                     console.log(data);

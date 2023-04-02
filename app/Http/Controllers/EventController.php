@@ -6,9 +6,11 @@ use App\Http\Requests\AddEventRequest;
 use App\Http\Requests\EditEventRequest;
 use App\Models\Event;
 use App\Models\Faculty;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use PharIo\Manifest\Url;
 
 class EventController extends Controller
 {
@@ -20,25 +22,40 @@ class EventController extends Controller
 
     public function editEvent(Request $request, $id)
     {
-        $event = Event::find($id);
-        $event->name = $request->name;
-        $event->description = $request->description;
-        $event->location = $request->location;
-        $event->start_at = $request->start_at;
-        $event->end_at = $request->end_at;
-        if ($request->hasFile('image')) {
-            $name = $request->file('image')->getClientOriginalName();
-            $request->file('image')->storeAs('images/events',  $name);
-            $event->image = 'images/events/' . $name;
+        if (!$request->hasFile('image')) {
+            $event = Event::find($id);
+            $event->name = $request->name;
+            $event->description = $request->description;
+            $event->location = $request->location;
+            $event->start_at = $request->start_at;
+            $event->end_at = $request->end_at;
+            $event->faculty_id = $request->faculty_id;
+            $event->save();
+            return response()->json([
+                'message' => 'Event edited successfully',
+                'event' => $event
+            ]);
         } else {
-            $event->image = 'null';
+            $event = Event::find($id);
+            $event->name = $request->name;
+            $event->description = $request->description;
+            $event->location = $request->location;
+            $event->start_at = $request->start_at;
+            $event->end_at = $request->end_at;
+            if ($request->hasFile('image')) {
+                $name = $request->file('image')->getClientOriginalName();
+                $request->file('image')->storeAs('images/events',  $name);
+                $event->image = 'images/events/' . $name;
+            } else {
+                $event->image = 'null';
+            }
+            $event->faculty_id = $request->faculty_id;
+            $event->save();
+            return response()->json([
+                'message' => 'Event edited successfully',
+                'event' => $event
+            ]);
         }
-        $event->faculty_id = $request->faculty_id;
-        $event->save();
-        return response()->json([
-            'message' => 'Event edited successfully',
-            'event' => $event
-        ]);
     }
 
     //getOne
@@ -90,15 +107,14 @@ class EventController extends Controller
     public function upload(Request $request)
     {
         if ($request->hasFile('upload')) {
-            $originName = $request->file('upload')->getClientOriginalName();
-            $fileName = pathinfo($originName, PATHINFO_FILENAME);
-            $extension = $request->file('upload')->getClientOriginalExtension();
-            $fileName = $fileName . '_' . time() . '.' . $extension;
-
-            $request->file('upload')->move(public_path('media'), $fileName);
-
-            $url = asset('media/' . $fileName);
-            return response()->json(['fileName' => $fileName, 'uploaded' => 1, 'url' => $url]);
+            $fileName = $request->file('upload')->getClientOriginalName();
+            $request->file('upload')->storeAs('images/description',   $fileName);
+            $url = Storage::Url('images/description/') .  $fileName;
+            return response()->json([
+                'fileName' => $fileName,
+                'uploaded' => 1,
+                'url' => $url,
+            ]);
         }
     }
 }

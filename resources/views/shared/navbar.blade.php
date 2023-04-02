@@ -15,11 +15,13 @@
       </a>
       <!-- Left links -->
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        @auth
         <li class="nav-item">
           <a class="nav-link" href="/dashboard">Dashboard</a>
         </li>
+        @endauth
         <li class="nav-item">
-          <a class="nav-link" href="#">Event</a>
+          <a class="nav-link" href="/search">Search</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Projects</a>

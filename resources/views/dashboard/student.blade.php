@@ -155,6 +155,7 @@
 </div>
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function showEdit(id) {
         $.ajax({
@@ -173,21 +174,40 @@
     }
 
     function deleteStudent(id) {
-        $.ajax({
-            type: "DELETE",
-            url: "/dashboard/student/" + id,
-            data: {
-                _token: "{{ csrf_token() }}"
-            },
-            success: function(response) {
-                alert(response.message);
-                console.log(response);
-                location.reload();
-            },
-            error: function(response) {
-                console.log(response);
+        Swal.fire({
+            title: 'Do you want to delete this student?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            denyButtonText: 'No',
+            customClass: {
+                actions: 'my-actions',
+                cancelButton: 'order-1 right-gap',
+                confirmButton: 'order-2',
+                denyButton: 'order-3',
             }
-        });
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire('Deleted', '', 'success')
+                $.ajax({
+                    type: "DELETE",
+                    url: "/dashboard/student/" + id,
+                    data: {
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        location.reload();
+                    },
+                    error: function(response) {
+                        console.log(response);
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.fire('Student is not deleted', '', 'info')
+            }
+        })
+
     }
 
     $(document).ready(function() {
@@ -205,10 +225,18 @@
                     _token: "{{ csrf_token() }}"
                 },
                 success: function(response) {
-                    console.log(response);
-                    alert(response.message);
-                    $('#addStudent').modal('hide');
-                    location.reload();
+                    Swal.fire({
+                        title: 'Added!',
+                        confirmButtonText: 'OK',
+                        icon: 'success',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            console.log(response);
+                            $('#addStudent').modal('hide');
+                            location.reload();
+                        }
+                    })
+
 
                 },
                 error: function(response) {
@@ -230,10 +258,18 @@
                     _token: "{{ csrf_token() }}"
                 },
                 success: function(response) {
-                    alert(response.message);
-                    console.log(response);
-                    $('#editStudent').modal('hide');
-                    location.reload();
+                    Swal.fire({
+                        title: 'Saved!',
+                        confirmButtonText: 'OK',
+                        icon: 'success',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            console.log(response);
+                            $('#editStudent').modal('hide');
+                            location.reload();
+                        }
+                    })
+
                 },
                 error: function(response) {
                     console.log(response);

@@ -12,7 +12,7 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $events = Event::where('start_at', '>', Carbon::now())->get();
+        $events = Event::where('start_at', '>', Carbon::now())->paginate(6);
         return view('home.index', ['events' => $events]);
     }
 }

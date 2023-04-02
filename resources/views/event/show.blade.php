@@ -11,16 +11,16 @@
 
         <div class="card booking-card v-2 mt-2 mb-4 rounded-bottom">
             <div class="bg-image hover-overlay ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
-                <img src="{{{Storage::url($event->image)}}}" class="img-fluid">
-                <a href="#!">
+                <img src="{{{Storage::url($event->image)}}}" class="img-fluid" style="width: 1500px; height: 900px; object-fit: cover;">
+                <a>
                     <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
                 </a>
             </div>
             <div class="card-body">
                 <h4 class="card-title font-weight-bold"><a>{{$event->name}}</a></h4>
                 <ul class="list-unstyled list-inline mb-2">
-                    <li class="list-inline-item"><i class="fas fa-graduation-cap"></i> {{$event->faculty->name}}</li> <br>
-                    <li class="list-inline-item"><i class="fas fa-map-marker-alt"></i> {{$event->location}}</li>
+                    <li class="list-inline-item"><i class="fas fa-graduation-cap"></i> Khoa: {{$event->faculty->name}}</li> <br>
+                    <li class="list-inline-item"><i class="fas fa-map-marker-alt"></i> Địa điểm: {{$event->location}}</li>
                 </ul>
                 <hr class="my-4">
                 <div class="card-text">

@@ -30,13 +30,13 @@
                     <td>
                         <div class="d-flex align-items-center">
                             <div class="float-left">
-                                <p class="fw-bold">{{ $event->name }}</p>
+                                <p class="fw-bold">{{Str::limit(strip_tags($event->name) , 50)}}</p>
                             </div>
                     </td>
                     <td>
                         <div>
                             <div class="float-left">
-                                <p class="fw-bold mb-0">{{ $event->description }}</p>
+                                <p class="fw-bold mb-0"> {{Str::limit(strip_tags($event->description) , 50)}} </p>
                             </div>
                     </td>
                     <td>
@@ -76,44 +76,83 @@
                 @endforeach
             </tbody>
         </table>
-    </div>
-    <nav aria-label="Page navigation example" style="margin-right:5px; padding-top:15px;">
-        <ul class="pagination justify-content-end">
-            <li class="page-item {{ $events->previousPageUrl() ? '' : 'disabled' }}">
-                @if($events->currentPage() >= 2)
-                <a class="page-link" href="event?page={{ $events->currentPage() - 1}}" tabindex="-1" aria-disabled="{{ $events->previousPageUrl() ? 'false' : 'true' }}">Previous</a>
-                @endif
-            </li>
-            @for($i=1;$i<=$events->lastPage();$i++)
-                <li class="page-item {{ $events->currentPage() == $i ? 'active' : '' }} "><a class="page-link" href="/dashboard/event?page={{$i}}">{{ $i }}</a></li>
-                @endfor
-                <li class="page-item {{ $events->nextPageUrl() ? '' : 'disabled' }}">
-                    @if($events->currentPage() < $events->lastPage())
-                        <a class="page-link" href="event?page={{ $events->currentPage() + 1}}" aria-disabled="{{ $events->nextPageUrl() ? 'false' : 'true' }}">Next</a>
-                        @endif
+        <nav aria-label="Page navigation example" style="margin-right:5px; padding-top:15px;">
+            <ul class="pagination justify-content-end">
+                <li class="page-item {{ $events->previousPageUrl() ? '' : 'disabled' }}">
+                    @if($events->currentPage() >= 2)
+                    <a class="page-link" href="event?page={{ $events->currentPage() - 1}}" tabindex="-1" aria-disabled="{{ $events->previousPageUrl() ? 'false' : 'true' }}">Previous</a>
+                    @endif
                 </li>
-        </ul>
-    </nav>
+                @for($i=1;$i<=$events->lastPage();$i++)
+                    <li class="page-item {{ $events->currentPage() == $i ? 'active' : '' }} "><a class="page-link" href="/dashboard/event?page={{$i}}">{{ $i }}</a></li>
+                    @endfor
+                    <li class="page-item {{ $events->nextPageUrl() ? '' : 'disabled' }}">
+                        @if($events->currentPage() < $events->lastPage())
+                            <a class="page-link" href="event?page={{ $events->currentPage() + 1}}" aria-disabled="{{ $events->nextPageUrl() ? 'false' : 'true' }}">Next</a>
+                            @endif
+                    </li>
+            </ul>
+        </nav>
+    </div>
+
 </div>
 @endsection
 
 @section('js')
 <script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="text/javascript">
-    ClassicEditor
-        .create(document.querySelector('#edit_description'), {
-            ckfinder: {
-                uploadUrl: "{{route('ckeditor.upload').'?_token='.csrf_token()}}",
-            },
-        })
-        .then(editor => {
-            console.log(editor);
-        })
-        .catch(error => {
-            console.error(error);
-        });
+    function init() {
+        initCKEditor();
+    }
+    var editorDescription = null;
+
+    function initCKEditor() {
+        ClassicEditor
+            .create(document.querySelector('#edit_description'), {
+                ckfinder: {
+                    uploadUrl: '/dashboard/upload?_token={{ csrf_token() }}',
+                },
+                toolbar: {
+                    items: [
+                        'heading',
+                        '|',
+                        'bold',
+                        'italic',
+                        '|',
+                        'uploadImage',
+                        'bulletedList',
+                        'numberedList',
+                        'blockQuote',
+                        'insertTable',
+                        'mediaEmbed',
+                        'undo',
+                        'redo'
+                    ]
+                },
+            })
+            .then(editor => {
+                editorDescription = editor;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    function setDataCKEditor(string) {
+        if (editorDescription != null) {
+            editorDescription.setData(string);
+        } else {
+            initCKEditor();
+            setTimeout(function() {
+                editorDescription.setData(string);
+            }, 1000);
+        }
+    }
 </script>
 <script>
+    $event_image = null;
+
     function showEdit(id) {
         $.ajax({
             type: "GET",
@@ -122,15 +161,7 @@
                 console.log(response);
                 $('#edit_id').val(response.id);
                 $('#edit_name').val(response.name);
-                ClassicEditor.create(document.querySelector('#edit_description'), {
-                        ckfinder: {
-                            uploadUrl: "{{route('ckeditor.upload').'?_token='.csrf_token()}}",
-                        },
-                    })
-                    .then(editor => {
-                        const string = response.description;
-                        editor.setData(string);
-                    })
+                setDataCKEditor(response.description);
                 $('#edit_faculty_id').val(response.faculty_id);
                 $('#edit_location').val(response.location);
                 $('#edit_start_at').val(response.start_at);
@@ -145,21 +176,39 @@
     }
 
     function deleteEvent(id) {
-        $.ajax({
-            type: "DELETE",
-            url: "/dashboard/event/" + id,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(response) {
-                alert(response.message);
-                console.log(response);
-                location.reload();
-            },
-            error: function(response) {
-                console.log(response);
+        Swal.fire({
+            title: 'Do you want to delete this event?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            denyButtonText: 'No',
+            customClass: {
+                actions: 'my-actions',
+                cancelButton: 'order-1 right-gap',
+                confirmButton: 'order-2',
+                denyButton: 'order-3',
             }
-        });
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire('Deleted!', '', 'success')
+                $.ajax({
+                    type: "DELETE",
+                    url: "/dashboard/event/" + id,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        location.reload();
+                    },
+                    error: function(response) {
+                        console.log(response);
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.fire('Event is not deleted', '', 'info')
+            }
+        })
     }
 
     function selectImage() {
@@ -185,9 +234,16 @@
                 processData: false,
                 contentType: false,
                 success: function(data) {
-                    console.log(data);
-                    $('#editEvent').modal('hide');
-                    location.reload();
+                    Swal.fire({
+                        title: 'Saved!',
+                        confirmButtonText: 'OK',
+                        icon: 'success',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $('#editEvent').modal('hide');
+                            location.reload();
+                        }
+                    })
                 },
                 error: function(data) {
                     console.log(data);
@@ -243,7 +299,7 @@
                     </div>
                     <div style="object-fit:cover; text-align: center;">
                         <img onclick="selectImage()" id="edit_image" name="edit_image" style="width:220px;height:180px;" />
-                        <input type="file" class="form-control" id="edit_image_save" name="image" accept="image" style="display: none;">
+                        <input type="file" class="form-control" id="edit_image_save" name="image" style="display: none;">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>

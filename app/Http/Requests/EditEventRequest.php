@@ -27,7 +27,7 @@ class EditEventRequest extends FormRequest
             'location' => 'required|string',
             'start_at' => 'required|date',
             'end_at' => 'required|date',
-            'image' => 'string',
+            'image' => 'required|string',
             'faculty_id' => 'required|integer',
         ];
     }

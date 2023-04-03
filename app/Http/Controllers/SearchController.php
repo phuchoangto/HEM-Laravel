@@ -19,25 +19,12 @@ class SearchController extends Controller
             });
         }
 
-        $checkins = $checkins->with('student', 'event')->paginate(10);
+        $checkins = $checkins->with('student', 'event')->paginate(0);
 
         return view('home.search', ['checkins' => $checkins, 'flag' => $flag]);
     }
 
 
-    // public function search(Request $request)
-    // {
-    //     $flag = false;
-    //     $search = $request->search;
-    //     if ($request->search != null) {
-    //         $checkins = Checkin::whereHas('student', function ($query) use ($search) {
-    //             $query->where('student_id', $search);
-    //         })->with('student', 'event')->get()->paginate(6);
-    //         $flag = true;
-    //     } else
-    //         $checkins = Checkin::all()->paginate(6);
-    //     return view('home.search', ['checkins' => $checkins, 'flag' => $flag]);
-    // }
     public function search(Request $request)
     {
         $flag = false;

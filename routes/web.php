@@ -59,7 +59,7 @@ Route::get('/dashboard/statis/studentCount', [App\Http\Controllers\StatisControl
 //checkin
 Route::get('dashboard/events/{id}/students', [App\Http\Controllers\CheckinController::class, 'showStudents'])->name('dashboard.checkin');
 Route::get('dashboard/events/{id}/students/export', [App\Http\Controllers\CheckinController::class, 'exportStudents'])->name('dashboard.checkin.export');
-Route::get('dashboard/events/{id}/students/{student_id}/certificate', [App\Http\Controllers\CheckinController::class, 'exportCertificate'])->name('dashboard.checkin.checkin');
+Route::get('dashboard/events/{event_id}/students/{student_id}/certificate', [App\Http\Controllers\CheckinController::class, 'exportCertificate']);
 
 //ckeditor
 Route::get('/ckeditor', [App\Http\Controllers\CkeditorController::class, 'index']);

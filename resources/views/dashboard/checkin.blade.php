@@ -45,9 +45,11 @@
                         <p>{{ $student->pivot->check_in_at }}</p>
                     </td>
                     <td style="text-align: center;">
-                        <button id="btn-certificate" class="btn btn-outline-warning btn-rounded btn-sm fw-bold text-warning">
-                            <i class="fas fa-certificate"></i>&nbsp Get Certificate
-                        </button>
+                        <a href="/dashboard/events/{{$event->id}}/students/{{$student->id}}/certificate">
+                            <button class="btn btn-outline-warning btn-rounded btn-sm fw-bold text-warning">
+                                <i class="fas fa-certificate"></i>&nbsp Get Certificate
+                            </button>
+                        </a>
                     </td>
                 </tr>
                 @endforeach
@@ -97,27 +99,15 @@
             });
         });
         $('#btn-certificate').click(function() {
-            var id = $(this).closest('tr').data('id');
             $.ajax({
-                url: '/dashboard/events/' + '{{ $event->id }}' + '/students/' + id + '/certificate',
+                url: '/dashboard/events/{{$event->id}}/students/{{$student->id}}/certificate',
                 method: 'GET',
-                action: 'getCertificate',
-                success: function(data) {
-                    var csvData = new Blob([data], {
-                        type: 'text/csv;charset=utf-8;'
-                    });
-                    var csvUrl = URL.createObjectURL(csvData);
-                    var link = document.createElement('a');
-                    link.href = csvUrl;
-                    link.download = 'students.csv';
-                    link.style.display = 'none';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    console.log(data);
+                success: function(response) {
+                    window.location.href = '/dashboard/events/{{$event->id}}/students/{{$student->id}}/certificate';
+                    console.log(response);
                 },
-                error: function(error) {
-                    console.log(error);
+                error: function(response) {
+                    console.log(response);
                 }
             });
         });

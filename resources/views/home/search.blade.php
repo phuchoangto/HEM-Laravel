@@ -28,8 +28,11 @@
     <div class="row row-cols-1 row-cols-md-3 g-4 ">
         @foreach($checkins as $checkin)
         <div class="col">
-            <a href="/event/{{$checkin->event->id}}">
-                <div class="card h-100">
+            <input type="hidden" id="event_id" value="{{$checkin->event->id}}">
+            <input type="hidden" id="student_id" value="{{$checkin->student->id}}">
+            <div class="card h-100">
+                <a href="/event/{{$checkin->event->id}}">
+
                     <img src="{{Storage::url($checkin->event->image) }}" class="card-img-top" alt="Event image" height="200px" />
                     <div class="card-body">
                         <h5 class="card-title">{{$checkin->event->name}}</h5>
@@ -37,11 +40,17 @@
                             {{Str::limit(strip_tags($checkin->event->description) , 50)}}
                         </p>
                     </div>
-                    <div class="card-footer text-muted">
-                        {{Carbon\Carbon::parse($checkin->event->start_at)->diffForHumans()}}
-                    </div>
+                </a>
+                <div class="card-footer text-muted">
+                    {{Carbon\Carbon::parse($checkin->event->start_at)->diffForHumans()}}
+                    <a href="/dashboard/events/{{$checkin->event->id}}/students/{{$checkin->student->id}}/certificate">
+                        <button class="btn btn-outline-warning btn-rounded btn-sm ml-3 fw-bold text-warning">
+                            <i class="fas fa-certificate"></i>&nbsp Get Certificate
+                        </button>
+                    </a>
                 </div>
-            </a>
+            </div>
+
         </div>
         @endforeach
     </div>
@@ -80,6 +89,24 @@
                 success: function(response) {
                     $('#search-result').html('Events have been checked in by student ');
                     $('#tbody').html(response);
+                    console.log(response);
+                },
+                error: function(response) {
+                    console.log(response);
+                }
+            });
+        });
+        $('#btn-certificate').click(function() {
+            var event_id = $('#event_id').val();
+            var student_id = $('#student_id').val();
+            $.ajax({
+                url: '/dashboard/events/' + event_id + '/students/' + student_id + '/certificate',
+                method: 'GET',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                },
+                success: function(response) {
+                    window.location.href = '/dashboard/events/' + event_id + '/students/' + student_id + '/certificate';
                     console.log(response);
                 },
                 error: function(response) {
